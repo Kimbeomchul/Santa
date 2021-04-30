@@ -14,7 +14,7 @@ def update_site_forward(apps, schema_editor):
         id=settings.SITE_ID,
         defaults={
             "domain": "santa.com",
-            "name": "Santa Mobile Project",
+            "name": "Santa_Mobile_Project",
         },
     )
 

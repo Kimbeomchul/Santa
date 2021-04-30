@@ -1,5 +1,5 @@
 """
-WSGI config for Santa Mobile Project project.
+WSGI config for Santa_Mobile_Project project.
 
 This module contains the WSGI application used by Django's development server
 and any production WSGI deployments. It should expose a module-level variable
