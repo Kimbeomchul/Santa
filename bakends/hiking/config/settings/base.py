@@ -65,12 +65,6 @@ DJANGO_APPS = [
     # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
     "django.forms",
-
-    # provider
-    "allauth.socialaccount.providers.google",
-    # "allauth.socialaccount.providers.facebook",
-    # "allauth.socialaccount.providers.kakao",
-    # "allauth.socialaccount.providers.naver",
 ]
 THIRD_PARTY_APPS = [
     "crispy_forms",
@@ -79,7 +73,14 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "rest_framework",
     "rest_framework.authtoken",
+    "rest_auth",
     "corsheaders",
+
+    # provider
+    "allauth.socialaccount.providers.google",
+    # "allauth.socialaccount.providers.facebook",
+    # "allauth.socialaccount.providers.kakao",
+    # "allauth.socialaccount.providers.naver",
 ]
 
 LOCAL_APPS = [
