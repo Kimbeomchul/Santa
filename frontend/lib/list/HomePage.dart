@@ -44,9 +44,9 @@ class HomePageState extends State<HomePage> {
       }
     });
   }
-  _title(){
-    return 'Lorem Ipsum Title';
-  }
+  // _title(){
+  //   return 'Lorem Ipsum Title';
+  // }
 
   Future<Null> _onRefresh()async{ // Drawer
     setState(() {
@@ -68,11 +68,11 @@ class HomePageState extends State<HomePage> {
     print("ResponseBody : ${response.body}");
     weatherData = jsonDecode(response.body);
 
-    if(weatherData['main']['temp']< 15){
-      print('추웡');
-    }else{
-      print("더웡");
-    }
+    // if(weatherData['main']['temp']< 15){
+    //   print('추웡');
+    // }else{
+    //   print("더웡");
+    // }
 
     return weatherData;
   }
@@ -111,7 +111,11 @@ class HomePageState extends State<HomePage> {
   }
 */
   _drawer(){
-    return Drawer(
+    return GestureDetector( // 드로어 열시 키보드 포커스제거
+        onTap: () {
+      FocusScope.of(context).unfocus();
+          },
+      child: Drawer(
       child:  ListView(
         padding:  EdgeInsets.zero,
         children: [
@@ -182,6 +186,7 @@ class HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      ),
     );
   }
   _buildBody() {
@@ -199,7 +204,7 @@ class HomePageState extends State<HomePage> {
             homeheader(),
             //중간에 부분..
             Container(
-              margin: EdgeInsets.only(left: 30, right: 30, top: 50),
+              margin: EdgeInsets.only(left: 30, right: 30, top: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -249,7 +254,7 @@ class HomePageState extends State<HomePage> {
 
             // 여기에 아이콘 리스트들 쭈르륵 나올 수 있도록
             Padding(
-              padding: EdgeInsets.only(top: 40, bottom: 20, left: 40, right: 40),
+              padding: EdgeInsets.only(top: 20, bottom: 20, left: 40, right: 40),
               child: Row(
 
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -263,7 +268,7 @@ class HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          //  child: Image.asset('images/map.png', fit: BoxFit.cover),
+                          child: Image.asset('images/favo.png', fit: BoxFit.cover),
                           width: 60, height: 60,
                         ),
                         Padding(padding: EdgeInsets.all(5),),
@@ -279,7 +284,7 @@ class HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          //  child: Image.asset('images/map.png', fit: BoxFit.cover),
+                            child: Image.asset('images/noti.png', fit: BoxFit.cover),
                           width: 60, height: 60,
                         ),
                         Padding(padding: EdgeInsets.all(5),),
@@ -294,7 +299,7 @@ class HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          //  child: Image.asset('images/map.png', fit: BoxFit.cover),
+                          child: Image.asset('images/talk.png', fit: BoxFit.cover),
                           width: 60, height: 60,
                         ),
                         Padding(padding: EdgeInsets.all(5),),
@@ -343,7 +348,32 @@ class HomePageState extends State<HomePage> {
             Text('오늘 하루는 저처럼 퇴사가 마려운 하루인가여?'),
             Padding(padding: EdgeInsets.only(bottom: 10)),
             Divider(),
+            Container(
+              margin: EdgeInsets.only(left: 30, right: 20, top: 0),
 
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  //color: Colors.
+                  Text('HOT 게시글', style: TextStyle(fontSize:15, fontWeight:FontWeight.w700,letterSpacing:0.22,color: Colors.cyan)),
+                  IconButton(icon: Icon(Icons.arrow_forward_ios, color: Colors.cyan, size: 18,),
+                    onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
+                    },
+                  ),
+
+                ],
+              ),
+
+            ),
+
+            Padding(padding: EdgeInsets.only(top: 5)),
+            Text('나는야 퉁퉁이'),
+            Padding(padding: EdgeInsets.only(bottom: 10)),
+            Padding(padding: EdgeInsets.only(top: 5)),
+            Text('멋쟁이 토마토'),
+            Padding(padding: EdgeInsets.only(bottom: 10)),
+            Divider(),
           ],
         ),
       ),
@@ -356,16 +386,24 @@ class HomePageState extends State<HomePage> {
     return Stack(
       children: <Widget>[
         //헤더? 같은 부분. sliver appbar 로 구현을 해야할 것 같긴 하나.. 어떻게 하지~~
-        Opacity(
-          opacity: 0.75,
+
+        Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height / 2.9,
           child: ClipPath(
-           // child: Image.asset('images/santalogo.png'),
+            child: Image.asset('images/logo.jpeg' ,fit: BoxFit.fill,),
           ),
         ),
+        // Opacity(
+        //   opacity: 0.75,
+        //   child: ClipPath(
+        //     child: Image.asset('images/santalogo.png'),
+        //   ),
+        // ),
 
         //검색창
         Container(
-          margin: EdgeInsets.only(left: 40, right: 40, top: MediaQuery.of(context).size.height / 2.8),
+          margin: EdgeInsets.only(left: 40, right: 40, top: MediaQuery.of(context).size.height / 3.2),
           child: Material(
             borderRadius: BorderRadius.circular(32.0),
             elevation: 8,
