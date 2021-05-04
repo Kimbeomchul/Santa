@@ -1,19 +1,26 @@
-from django.contrib.auth import forms as admin_forms
-from django.contrib.auth import get_user_model
-from django.utils.translation import gettext_lazy as _
+from django import forms
+from django.utils.translation import ugettext_lazy as _
 
-User = get_user_model()
-
-
-class UserChangeForm(admin_forms.UserChangeForm):
-    class Meta(admin_forms.UserChangeForm.Meta):
-        model = User
+from .models import Profile
 
 
-class UserCreationForm(admin_forms.UserCreationForm):
-    class Meta(admin_forms.UserCreationForm.Meta):
-        model = User
+class SignupForm(forms.Form):
+    name = forms.CharField(label=_('name'),
+                           max_length=255,
+                           widget=forms.TextInput(
+                           attrs={'placeholder':
+                                  _('name'), }))
+    phone = forms.CharField(label=_('Phone number'),
+                            max_length=30,
+                            widget=forms.TextInput(
+                                attrs={'placeholder':
+                                           _('Phone number'), }))
 
-        error_messages = {
-            "username": {"unique": _("This username has already been taken.")}
-        }
+    def signup(self, request, user):
+        user.name = self.cleaned_data['name']
+        user.save()
+
+        profile = Profile()
+        profile.user = user
+        profile.phone = self.cleaned_data['phone']
+        profile.save()

@@ -44,9 +44,9 @@ class HomePageState extends State<HomePage> {
       }
     });
   }
-  // _title(){
-  //   return 'Lorem Ipsum Title';
-  // }
+  _title(){
+    return 'Lorem Ipsum Title';
+  }
 
   Future<Null> _onRefresh()async{ // Drawer
     setState(() {
@@ -68,11 +68,11 @@ class HomePageState extends State<HomePage> {
     print("ResponseBody : ${response.body}");
     weatherData = jsonDecode(response.body);
 
-    // if(weatherData['main']['temp']< 15){
-    //   print('추웡');
-    // }else{
-    //   print("더웡");
-    // }
+    if(weatherData['main']['temp']< 15){
+      print('추웡');
+    }else{
+      print("더웡");
+    }
 
     return weatherData;
   }
@@ -111,11 +111,7 @@ class HomePageState extends State<HomePage> {
   }
 */
   _drawer(){
-    return GestureDetector( // 드로어 열시 키보드 포커스제거
-        onTap: () {
-      FocusScope.of(context).unfocus();
-          },
-      child: Drawer(
+    return Drawer(
       child:  ListView(
         padding:  EdgeInsets.zero,
         children: [
@@ -185,7 +181,6 @@ class HomePageState extends State<HomePage> {
 
           ),
         ],
-      ),
       ),
     );
   }
@@ -268,7 +263,7 @@ class HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          child: Image.asset('images/favo.png', fit: BoxFit.cover),
+                          child: Image.asset('images/recc.png', fit: BoxFit.cover),
                           width: 60, height: 60,
                         ),
                         Padding(padding: EdgeInsets.all(5),),
@@ -299,7 +294,7 @@ class HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          child: Image.asset('images/talk.png', fit: BoxFit.cover),
+                          child: Image.asset('images/chat.png', fit: BoxFit.cover),
                           width: 60, height: 60,
                         ),
                         Padding(padding: EdgeInsets.all(5),),
@@ -391,7 +386,7 @@ class HomePageState extends State<HomePage> {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height / 2.9,
           child: ClipPath(
-            child: Image.asset('images/logo.jpeg' ,fit: BoxFit.fill,),
+            child: Image.asset('images/santalogo.png' ,fit: BoxFit.fill,),
           ),
         ),
         // Opacity(
