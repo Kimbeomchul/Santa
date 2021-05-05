@@ -2,21 +2,39 @@ PODS:
   - Flutter (1.0.0)
   - geolocator (6.2.0):
     - Flutter
+  - kakao_flutter_sdk (0.5.4):
+    - Flutter
+  - package_info (0.0.1):
+    - Flutter
+  - shared_preferences (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - geolocator (from `.symlinks/plugins/geolocator/ios`)
+  - kakao_flutter_sdk (from `.symlinks/plugins/kakao_flutter_sdk/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
   geolocator:
     :path: ".symlinks/plugins/geolocator/ios"
+  kakao_flutter_sdk:
+    :path: ".symlinks/plugins/kakao_flutter_sdk/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   geolocator: f5e3de65e241caba7ce3e8a618803387bda73384
+  kakao_flutter_sdk: b9b525a2b41cb75a761bea4b48dba4121f58dce1
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
+  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
 
-PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
+PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
 
 COCOAPODS: 1.10.1

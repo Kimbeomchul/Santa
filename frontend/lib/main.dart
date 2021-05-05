@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'login.dart';
 import 'navigation_route.dart';
 void main() {
   runApp(MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: NavigationRouter(),
+      home: KakaoLoginTest(),
     );
   }
 }

@@ -28,6 +28,7 @@ dependencies:
   geolocator: ^6.0.0+4
   pull_to_refresh: ^1.6.1
   expandable: ^3.0.0+1
+  kakao_flutter_sdk: ^0.5.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
