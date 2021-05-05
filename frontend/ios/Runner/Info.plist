@@ -2,6 +2,20 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <!-- common -->
+        <string>kakao${c03a985376702fe2cbf7fab36e33e0fd}</string>
+
+        <!-- KakaoTalk login -->
+        <string>kakaokompassauth</string>
+        <string>storykompassauth</string>
+
+        <!-- KakaoLink -->
+        <string>kakaolink</string>
+        <string>kakaotalk-5.9.7</string>
+    </array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
