@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
+
 
 class KakaoLogin extends StatelessWidget {
   @override
@@ -28,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
   bool _isKakaoTalkInstalled = false; // 카카오톡 설치여부 bool
-
+  var url = 'http://127.0.0.1:8000/dj-rest-auth/google/';
 
   // 구글 로그인  -- Start
   void LoginWithGoogle() async {
@@ -37,7 +41,6 @@ class _LoginPageState extends State<LoginPage> {
         'email',
         // you can add extras if you require
       ],
-      clientId: 'AIzaSyAVw5ZxEo5vyt1Qry7BNyFIZGMHgeP5Vjk',
     );
 
 
@@ -50,9 +53,33 @@ class _LoginPageState extends State<LoginPage> {
 
       acc.authentication.then((GoogleSignInAuthentication auth) async {
         print(auth.idToken);
-        print(auth.accessToken);
+        print(auth.accessToken );
+
+        final response = await http.post(
+          'http://127.0.0.1:8000/dj-rest-auth/google/',
+          headers: {
+            "Content-Type": "application/json",
+            'Accept': 'application/json',
+          },
+          body: jsonEncode(
+            {
+              "access_token": auth.accessToken,
+              "code": '',
+              "id_token": auth.idToken,
+            }
+          ),
+        );
+        if (response.statusCode == 200){
+          print(response);
+          print(jsonDecode(response.body)['key']);
+
+        }
+        else{
+          throw Exception('구글 로그인 실패');
+        }
       });
     });
+
   }
   // 구글 로그인 -- End
 
