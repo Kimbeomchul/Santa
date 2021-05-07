@@ -249,7 +249,7 @@ class HomePageState extends State<HomePage> {
 
             // 여기에 아이콘 리스트들 쭈르륵 나올 수 있도록
             Padding(
-              padding: EdgeInsets.only(top: 20, bottom: 20, left: 40, right: 40),
+              padding: EdgeInsets.only(top: 10, bottom: 20, left: 40, right: 40),
               child: Row(
 
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -263,11 +263,10 @@ class HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          child: Image.asset('images/recc.png', fit: BoxFit.cover),
-                          width: 60, height: 60,
+                          child: Icon(Icons.map_outlined, size: 55,),
                         ),
                         Padding(padding: EdgeInsets.all(5),),
-                        Text('산타의 추천'), // 서브메뉴 1
+                        Text('지도'), // 서브메뉴 1
                       ],
                     ),
                   ),
@@ -279,8 +278,7 @@ class HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                            child: Image.asset('images/noti.png', fit: BoxFit.cover),
-                          width: 60, height: 60,
+                          child: Icon(Icons.notifications_active_outlined, size: 50,),
                         ),
                         Padding(padding: EdgeInsets.all(5),),
                         Text('공지사항'), // 서브메뉴 2
@@ -294,8 +292,7 @@ class HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          child: Image.asset('images/chat.png', fit: BoxFit.cover),
-                          width: 60, height: 60,
+                          child: Icon(Icons.chat_outlined, size: 47,),
                         ),
                         Padding(padding: EdgeInsets.all(5),),
                         Text('산타의 한마디'), // 서브메뉴 3
@@ -386,7 +383,7 @@ class HomePageState extends State<HomePage> {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height / 2.9,
           child: ClipPath(
-            child: Image.asset('images/santalogo.png' ,fit: BoxFit.fill,),
+            child: Image.asset('images/Design.jpeg' ,fit: BoxFit.fill,),
           ),
         ),
         // Opacity(

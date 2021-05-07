@@ -8,6 +8,13 @@ import 'dart:async';
 import 'mountain_model.dart';
 import 'package:santa_front/pk_skeleton.dart';
 
+//
+//
+// Todo = _buildBody에서 타임아웃 설정해야함 ELSE부분.. 무한로딩중
+//
+//
+
+
 class MountainInfo extends StatefulWidget {
   final String mt_word;
   MountainInfo(this.mt_word);
@@ -21,6 +28,7 @@ class _MountainInfoState extends State<MountainInfo> {
   var mt_data;
   var decode_data;
   var deep_info;
+
   //
   // var img_data;
   // var decode_img_data;
@@ -142,6 +150,7 @@ class _MountainInfoState extends State<MountainInfo> {
   }
 
 
+
   Widget _buildBody() {
     if (search_mt.length != 0) {
       return ListView.builder(
@@ -149,12 +158,14 @@ class _MountainInfoState extends State<MountainInfo> {
         itemCount: search_mt.length,
       );
     }
-
     else { // 검색결과 null
-      return PKCardListSkeleton(
-        isCircularImage: true,
-        isBottomLinesActive: true,
-        length: 10,
+      return Container(
+        child: PKCardListSkeleton(
+          isCircularImage: true,
+          isBottomLinesActive: true,
+          length: 10,
+        ),
+
       );
     }
   }
