@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:santa_front/users/login.dart';
 
-import 'login.dart';
 import 'users/google_login.dart';
 import 'navigation_route.dart';
 void main() {
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: GoogleLoginTest(),
+      home: NavigationRouter(),
     );
   }
 }

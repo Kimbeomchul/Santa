@@ -1,31 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:kakao_flutter_sdk/auth.dart';
-import 'package:kakao_flutter_sdk/user.dart';
+import 'package:kakao_flutter_sdk/all.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-class KakaoLoginTest extends StatelessWidget {
-  // This widget is the root of your application.
+class KakaoLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     KakaoContext.clientId = 'c03a985376702fe2cbf7fab36e33e0fd';
 
     return MaterialApp(
-      home: KakaoLogin(),
+      home: LoginPage(),
     );
   }
 }
 
-class KakaoLogin extends StatefulWidget {
-  KakaoLogin({Key key, this.title}) : super(key: key);
 
+class LoginPage extends StatefulWidget {
+
+  LoginPage({Key key, this.title}) : super(key: key);
   final String title;
 
   @override
-  _KakaoLoginState createState() => _KakaoLoginState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _KakaoLoginState extends State<KakaoLogin> {
-  bool _isKakaoTalkInstalled = false;
+class _LoginPageState extends State<LoginPage> {
 
+
+  bool _isKakaoTalkInstalled = false; // 카카오톡 설치여부 bool
+
+
+  // 구글 로그인  -- Start
+  void LoginWithGoogle() async {
+    GoogleSignIn _googleSignIn = GoogleSignIn(
+      scopes: [
+        'email',
+        // you can add extras if you require
+      ],
+      clientId: 'AIzaSyAVw5ZxEo5vyt1Qry7BNyFIZGMHgeP5Vjk',
+    );
+
+
+    _googleSignIn.signIn().then((GoogleSignInAccount acc) async {
+      GoogleSignInAuthentication auth = await acc.authentication;
+      print(acc.id);
+      print(acc.email);
+      print(acc.displayName);
+      print(acc.photoUrl);
+
+      acc.authentication.then((GoogleSignInAuthentication auth) async {
+        print(auth.idToken);
+        print(auth.accessToken);
+      });
+    });
+  }
+  // 구글 로그인 -- End
+
+
+
+
+
+  // 카카오 로그인 -- Start
   @override
   void dispose() {
     super.dispose();
@@ -44,6 +79,7 @@ class _KakaoLoginState extends State<KakaoLogin> {
     setState(() {
       _isKakaoTalkInstalled = installed;
     });
+  }
     //
     // if (_isKakaoTalkInstalled.toString() == "true"){
     //   _loginWithTalk();
@@ -52,7 +88,7 @@ class _KakaoLoginState extends State<KakaoLogin> {
     // }else{
     //   print("카카오톡 설치여부 분기에러 ");
     // }
-  }
+
 
   _issueAccessToken(String authCode) async {
     try {
@@ -108,11 +144,10 @@ class _KakaoLoginState extends State<KakaoLogin> {
       print(e);
     }
   }
+  // 카카오 로그인 End
 
 
   // 카카오톡 로그인 세션유지중인지 확인하는 토큰체커 코드
-
-
   // AccessToken token = await AccessTokenStore.instance.fromStore();
   // if (token.refreshToken == null) {
   // Navigator.of(context).pushReplacementNamed('/login');
@@ -125,18 +160,22 @@ class _KakaoLoginState extends State<KakaoLogin> {
     isKakaoTalkInstalled();
 
     return Scaffold(
-    //   appBar: AppBar(
-    //     title: Text("Kakao Flutter SDK Login"),
-    //     actions: [],
-    //   ),
+      //   appBar: AppBar(
+      //     title: Text("Kakao Flutter SDK Login"),
+      //     actions: [],
+      //   ),
       body: Center(
         child: Column(
           children: <Widget>[
             Padding(padding: EdgeInsets.only(top: 50),),
             RaisedButton(
-                child: Text("Login with Talk"),
+                child: Text("카카오톡 로그인"),
                 onPressed:
                 _isKakaoTalkInstalled ? _loginWithTalk : _loginWithKakao),
+            RaisedButton(
+                child: Text("구글 로그인 "),
+                onPressed:LoginWithGoogle,
+                ),
             RaisedButton(
               child: Text("Logout"),
               onPressed: logOutTalk,
