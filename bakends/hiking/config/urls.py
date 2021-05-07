@@ -17,8 +17,14 @@ urlpatterns = [
     # User management
     path("users/", include("hiking.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
+    path("accounts/", include("rest_auth.urls")),
+    path("accounts/", include("dj_rest_auth.urls")),
+    # dj-rest-auth,
+    path("dj-rest-auth/google/", views.GoogleLogin.as_view(), name='google_login'),
+    path("dj-rest-auth/kakao/", views.KaKaoLogin.as_view(), name='kakao_login'),
     # rest auth,
     path("rest-auth/google/", views.GoogleLogin.as_view(), name='google_login'),
+    path("rest-auth/kakao/", views.KaKaoLogin.as_view(), name='kakao_login'),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
