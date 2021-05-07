@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: KakaoLogin(),
+      home: NavigationRouter(),
     );
   }
 }
