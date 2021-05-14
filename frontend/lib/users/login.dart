@@ -5,7 +5,6 @@ import 'package:kakao_flutter_sdk/all.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 
-
 class KakaoLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   var url = 'http://127.0.0.1:8000/dj-rest-auth/google/';
 
   // 구글 로그인  -- Start
-  void LoginWithGoogle() async {
+   LoginWithGoogle() async {
     GoogleSignIn _googleSignIn = GoogleSignIn(
       scopes: [
         'email',
@@ -77,10 +76,15 @@ class _LoginPageState extends State<LoginPage> {
         else{
           throw Exception('구글 로그인 실패');
         }
+
       });
+
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => NavigationRouter(),), (route) => false, ); //스택초기화 라우터
     });
 
   }
+
+
   // 구글 로그인 -- End
 
 
@@ -125,10 +129,8 @@ class _LoginPageState extends State<LoginPage> {
       print(token);
       // var code = await AuthCodeClient.instance.requestWithTalk();
       //print(code + ' == KAKAO AUTH TOKEN');
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LoginDone()),
-      );
+
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => NavigationRouter(),), (route) => false, ); //스택초기화 라우터
     } catch (e) {
       print("토큰 획득실패 _issueAccessToken() : $e");
     }
@@ -193,16 +195,26 @@ class _LoginPageState extends State<LoginPage> {
       //   ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 50),),
-            RaisedButton(
-                child: Text("카카오톡 로그인"),
-                onPressed:
-                _isKakaoTalkInstalled ? _loginWithTalk : _loginWithKakao),
-            RaisedButton(
-                child: Text("구글 로그인 "),
-                onPressed:LoginWithGoogle,
-                ),
+
+            Container(
+              child:
+              Image.asset('images/Design.jpeg' ,fit: BoxFit.cover,),
+            ),
+            Padding(padding: EdgeInsets.only(top: 100),),
+
+            GestureDetector(
+              child:
+              Image.asset('images/loginK.png' ,fit: BoxFit.cover,),
+              onTap: _isKakaoTalkInstalled ? _loginWithTalk : _loginWithKakao,
+            ),
+            GestureDetector(
+              child:
+              Image.asset('images/loginG.png' ,fit: BoxFit.cover,),
+              onTap: LoginWithGoogle,
+            ),
             RaisedButton(
               child: Text("Logout"),
               onPressed: logOutTalk,
@@ -214,26 +226,3 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class LoginDone extends StatelessWidget {
-  Future<bool> _getUser() async {
-    try {
-      User user = await UserApi.instance.me(); // 유저정보
-      print(user.toString());
-    } on KakaoAuthException catch (e) {
-    } catch (e) {
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _getUser();
-
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Text('Login Success!'),
-        ),
-      ),
-    );
-  }
-}

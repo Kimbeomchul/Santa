@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk/all.dart';
+import 'package:santa_front/users/login.dart';
 
 class UserProfile extends StatefulWidget {
+
+
+
   @override
   _UserProfileState createState() => _UserProfileState();
 }
@@ -8,6 +13,52 @@ class UserProfile extends StatefulWidget {
 
 
 class _UserProfileState extends State<UserProfile> {
+  String accountEmail = 'None';
+  String ageRange = 'None';
+  String gender = 'None';
+  String profile = 'None';
+  String userId = 'None';
+  String nickname = 'None';
+
+//카카오 유저 정보 가져오기
+  Future KakaoUser() async {
+    try {
+      User user = await UserApi.instance.me(); // 유저정보
+   //   print(user.toString());
+      setState(() {
+        accountEmail = user.kakaoAccount.email;
+        ageRange = user.kakaoAccount.ageRange.toString();
+        gender = user.kakaoAccount.gender.toString();
+        nickname =user.kakaoAccount.profile.nickname;
+        profile = user.kakaoAccount.profile.profileImageUrl.toString();
+      });
+
+    } catch (e) {
+      print("NotKLogin");
+    }
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    KakaoUser();
+  }
+
+
+  LogOutUser() async {   // 로그아웃 로직
+    if(nickname != 'None'){
+      try {
+        var code = await UserApi.instance.logout();
+        print(code.toString());
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => KakaoLogin(),), (route) => false, ); //스택초기화 라우터
+      } catch (e) {
+        print("로그아웃 실패 : $e");
+      }
+    }else{
+      print('GOOGLE LOGOUT 구현필요 ');
+    }
+  }
+
 
   Widget stats(String statName, int statCount) { // 팔로우 포스트 팔로일 
     return Column(
@@ -28,10 +79,62 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
+// 유저 프로필 사진
+  Widget _userImg(){
+    if (profile != 'None') {
+      return Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey[500],
+              offset: Offset(4.0, 4.0),
+              blurRadius: 15.0,
+              spreadRadius: 1.0,
+            ),
+          ],
+          shape: BoxShape.circle,
+
+          image: DecorationImage(
+              image: NetworkImage(profile),
+              fit: BoxFit.cover
+          ),
+
+        ),
+      );
+    }else{
+      return Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey[500],
+              offset: Offset(4.0, 4.0),
+              blurRadius: 15.0,
+              spreadRadius: 1.0,
+            ),
+          ],
+          shape: BoxShape.circle,
+
+          image: DecorationImage(
+              image: NetworkImage('https://blog.kakaocdn.net/dn/cyOIpg/btqx7JTDRTq/1fs7MnKMK7nSbrM9QTIbE1/img.jpg'),  //임시 투명이미지
+              fit: BoxFit.cover
+          ),
+
+        ),
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+
+    return WillPopScope(
+        child: Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -41,7 +144,7 @@ class _UserProfileState extends State<UserProfile> {
             child: Row(
               children: [
                 Padding(padding: EdgeInsets.only(left: 10)),
-                Text("Santa Application",
+                Text("Santa Application  ",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 20,
@@ -53,6 +156,11 @@ class _UserProfileState extends State<UserProfile> {
                     icon: Icon(Icons.share),
                     color: Colors.black,
                     onPressed: null
+                ),
+                IconButton(
+                    icon: Icon(Icons.logout),
+                    color: Colors.black,
+                    onPressed: LogOutUser,
                 ),
               ],
 
@@ -68,26 +176,7 @@ class _UserProfileState extends State<UserProfile> {
                 Padding(padding: EdgeInsets.only(left: 5),
                 child : Row(
                   children: [
-                    Container(
-                      width:100,
-                      height:100,
-                      decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey[500],
-                          offset: Offset(4.0, 4.0),
-                          blurRadius: 15.0,
-                          spreadRadius: 1.0,
-                        ),
-                      ],
-                        shape:  BoxShape.circle,
-                        image: DecorationImage(
-
-                          fit:BoxFit.fill,
-                          image : AssetImage('images/santalogo.png'),
-                        ),
-                      ),
-                    ),
+                    _userImg(),
                     Column(
                       children: [
                         Row(
@@ -126,6 +215,17 @@ class _UserProfileState extends State<UserProfile> {
                 SizedBox(
                   height: 10,
                 ),
+                Padding(padding: EdgeInsets.only(left: 10,top: 10,bottom: 5),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    Text(nickname,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+                    Text(accountEmail,style: TextStyle(fontSize: 15),),
+                  ],
+                ),
+                ),
                 Divider(color:Colors.black),
               ],
             ),
@@ -135,6 +235,7 @@ class _UserProfileState extends State<UserProfile> {
         ],
 
       ),
+        ),
     );
   }
 

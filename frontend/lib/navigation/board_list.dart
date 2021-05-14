@@ -20,7 +20,8 @@ class BoardList extends StatefulWidget {
 class _BoardListState extends State<BoardList> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        child: Scaffold(
       appBar: AppBar(
         actions: [
           new IconButton(
@@ -41,6 +42,7 @@ class _BoardListState extends State<BoardList> {
          child: Icon(Icons.add, color: Colors.white,),
          backgroundColor: Colors.black,
        ),
+        ),
     );
   }
 
