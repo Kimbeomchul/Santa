@@ -38,8 +38,19 @@ class HomePageState extends State<HomePage> {
   String _profile = 'None';
   String _userId = 'None';
   String _nickname = 'None';
+  String LoginWith = '';
 
-
+ // 로그아웃 구현
+  LogOut(){
+    Navigator.of(context, rootNavigator: true).pop('dialog');  //취소
+    if (LoginWith == 'Kakao') {
+      LogOutUser(); // 카카오 로그아웃
+    }else if(LoginWith == 'Google'){
+      print("구글 로그아웃 구현하기 ");
+    }else{
+      print("세션에러");
+    }
+  }
 
 //카카오 유저 정보 가져오기
   Future _KakaoUser() async {
@@ -47,6 +58,7 @@ class HomePageState extends State<HomePage> {
       User user = await UserApi.instance.me(); // 유저정보
     //  print(user.toString());
       setState(() {
+        LoginWith = 'Kakao';
         _accountEmail = user.kakaoAccount.email;
         _ageRange = user.kakaoAccount.ageRange.toString();
         _gender = user.kakaoAccount.gender.toString();
@@ -243,9 +255,23 @@ class HomePageState extends State<HomePage> {
                   ListTile(
                     leading:Icon(Icons.logout),
                     title:Text("로그아웃"),
-                    onTap: (){
-                      LogOutUser();
-                    },
+                    onTap :  () => showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text('로그아웃 하시겠습니까?'),
+                            actions: [
+                              FlatButton(
+                                onPressed: () => Navigator.of(context, rootNavigator: true).pop('dialog'),  //취소
+                                child: Text('취소'),
+                              ),
+                              FlatButton(
+                                onPressed: () => LogOut(), // passing true
+                                child: Text('로그아웃'),
+                              ),
+                            ],
+                          );
+                        }),
                   ),
 
                 ],

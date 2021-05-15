@@ -49,7 +49,7 @@ Widget detail_if(){
     var detail_info = widget.mountain.mntidetails.toString();
 
     if(detail_info == "( - )"){
-      detail_info ='죄송합니다. 해당 산 상세정보가 존재하지 않습니다.ㅠ';
+      detail_info ='산 정보기 존재하지 않습니다. 빠르게 추가하도록 하겠습니다!';
     }else{
       detail_info = widget.mountain.mntidetails;
     }
@@ -79,9 +79,6 @@ Widget detail_if(){
         SliverAppBar(
           expandedHeight: 250.0,
           pinned: false,
-          shape: RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius.vertical(bottom: Radius.circular(50))), //like this
           backgroundColor: Colors.white,
           flexibleSpace: FlexibleSpaceBar(
             //title: Text(widget.mountain.mntiname, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),),
@@ -134,6 +131,17 @@ Widget detail_if(){
                     children: <Widget>[
                       Text('전화번호', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.cyan),),
                       Text(widget.mountain.mntiadminnum, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54),)
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text('높이', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.cyan),),
+                      Text(widget.mountain.mntihigh + 'm', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54),)
                     ],
                   ),
                 ),

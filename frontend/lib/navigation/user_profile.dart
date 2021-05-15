@@ -19,13 +19,14 @@ class _UserProfileState extends State<UserProfile> {
   String profile = 'None';
   String userId = 'None';
   String nickname = 'None';
-
+  String LoginWith = '';
 //카카오 유저 정보 가져오기
   Future KakaoUser() async {
     try {
       User user = await UserApi.instance.me(); // 유저정보
    //   print(user.toString());
       setState(() {
+        LoginWith = 'Kakao';
         accountEmail = user.kakaoAccount.email;
         ageRange = user.kakaoAccount.ageRange.toString();
         gender = user.kakaoAccount.gender.toString();
@@ -43,10 +44,18 @@ class _UserProfileState extends State<UserProfile> {
     super.initState();
     KakaoUser();
   }
-
+ LogOut(){
+   Navigator.of(context, rootNavigator: true).pop('dialog');  //취소
+   if (LoginWith == 'Kakao') {
+     LogOutUser(); // 카카오 로그아웃
+   }else if(LoginWith == 'Google'){
+     print("구글 로그아웃 구현하기 ");
+   }else{
+     print("세션에러");
+   }
+ }
 
   LogOutUser() async {   // 로그아웃 로직
-    if(nickname != 'None'){
       try {
         var code = await UserApi.instance.logout();
         print(code.toString());
@@ -54,9 +63,6 @@ class _UserProfileState extends State<UserProfile> {
       } catch (e) {
         print("로그아웃 실패 : $e");
       }
-    }else{
-      print('GOOGLE LOGOUT 구현필요 ');
-    }
   }
 
 
@@ -160,7 +166,23 @@ class _UserProfileState extends State<UserProfile> {
                 IconButton(
                     icon: Icon(Icons.logout),
                     color: Colors.black,
-                    onPressed: LogOutUser,
+                    onPressed: () => showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text('로그아웃 하시겠습니까?'),
+                            actions: [
+                              FlatButton(
+                                onPressed: () => Navigator.of(context, rootNavigator: true).pop('dialog'),  //취소
+                                child: Text('취소'),
+                              ),
+                              FlatButton(
+                                onPressed: () => LogOut(), // passing true
+                                child: Text('로그아웃'),
+                              ),
+                            ],
+                          );
+                        }),
                 ),
               ],
 
