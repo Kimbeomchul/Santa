@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../navigation_route.dart';
@@ -29,12 +29,18 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
+  var googleEmail;
+  var googleId;
+  var googleImg;
+  var googleNickname;
+  SharedPreferences _prefs;
 
   bool _isKakaoTalkInstalled = false; // 카카오톡 설치여부 bool
 
 
   // 구글 로그인  -- Start
+
+
    LoginWithGoogle() async {
     GoogleSignIn _googleSignIn = GoogleSignIn(
       scopes: [
@@ -47,15 +53,32 @@ class _LoginPageState extends State<LoginPage> {
 
     _googleSignIn.signIn().then((GoogleSignInAccount acc) async {
       GoogleSignInAuthentication auth = await acc.authentication;
-      print(acc.id);
-      print(acc.email);
-      print(acc.displayName);
-      print(acc.photoUrl);
+      if(acc.id != null || acc.email != null || acc.photoUrl != null){
+        // _prefs.setString('googleId', acc.id);
+        // _prefs.setString('googleEmail', acc.email);
+        // _prefs.setString('googleImg', acc.photoUrl);
+        _prefs ??= await SharedPreferences.getInstance();
+        await _prefs.setString('googleNickname', acc.displayName);
+        await _prefs.setString('googleImg', acc.photoUrl);
+        await _prefs.setString('googleEmail', acc.email);
+        await _prefs.setString('googleId', acc.id);
+        await _prefs.setString('LoginWith', 'Google');
+
+        // googleNickname = (_prefs.getString('googleNickname') ?? '');
+        // print(googleNickname);
+        // googleImg = (_prefs.getString('googleImg') ?? '');
+        // print(googleImg);
+        // googleEmail = (_prefs.getString('googleEmail') ?? '');
+        // print(googleEmail);
+        // googleId = (_prefs.getString('googleId') ?? '');
+        // print(googleId);
+
+      }
+
 
       acc.authentication.then((GoogleSignInAuthentication auth) async {
         print(auth.idToken);
         print(auth.accessToken);
-        print(auth.accessToken );
 
         // final response = await http.post(
         //   'http://127.0.0.1:8000/dj-rest-auth/google/',
