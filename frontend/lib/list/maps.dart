@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:santa_front/mountain/mt_detail.dart';
+import 'package:santa_front/mountain/mt_info.dart';
 
 class Maps extends StatefulWidget {
   @override
@@ -49,6 +51,10 @@ class _MapsState extends State<Maps> {
         icon: _markerIcon,
         infoWindow: InfoWindow(
           title: '가리산',
+          snippet: "산행거리 : 9.6㎞(약 5시간)\n산행코스 : 홍천고개(580m)-681봉-등잔봉-새득이봉-가삽고개-3봉-2봉-1봉(가리산정상)-무쇠말재-가리산휴양림-매표소-예지수련원도로",
+          onTap: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfo("가리산")));
+          }
         ),
       ),
       // INFO
@@ -62,6 +68,10 @@ class _MapsState extends State<Maps> {
         icon: _markerIcon,
         infoWindow: InfoWindow(
           title: '가리왕산',
+          snippet: "산행거리 : 9.4㎞(약 5시간)\n산행코스 : 장구목이 입구-임도-정상 삼거리-가리왕산-장구목이 입구 ",
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfo("가리왕산")));
+            }
         ),
       ),
       // INFO
@@ -75,6 +85,10 @@ class _MapsState extends State<Maps> {
         icon: _markerIcon,
         infoWindow: InfoWindow(
           title: '공작산',
+          snippet: "산행거리 : 5.4㎞(약 3시간)\n산행코스 : 공작현-406번국도-공작산 입구-공작릉-능선삼거리-공작산 정상-능선삼거리-공작현",
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfo("공작산")));
+            }
         ),
       ),
       // INFO
@@ -87,6 +101,10 @@ class _MapsState extends State<Maps> {
         icon: _markerIcon,
         infoWindow: InfoWindow(
           title: '방태산',
+          snippet: "산행거리 : 12.3㎞(약 7시간)\n산행코스 : 개인약수산장-개인약수터-이정표-정상 주억봉-구룡덕봉-샘터방향 하산-개인약수산장 ",
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfo("방태산")));
+            }
         ),
       ),
       // INFO
@@ -100,6 +118,11 @@ class _MapsState extends State<Maps> {
         icon: _markerIcon,
         infoWindow: InfoWindow(
           title: '명성산',
+          snippet: "산행거리 : 5.5㎞(약 4시간)\n산행코스 : 주차장-비선폭포-등룡폭포-억새군락지-팔각정-나무계단-책바위-비선폭포 ",
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfo("명성산")));
+            }
+
         ),
       ),
       // INFO
@@ -112,6 +135,10 @@ class _MapsState extends State<Maps> {
         icon: _markerIcon,
         infoWindow: InfoWindow(
           title: '가야산',
+          snippet: "산행거리 : 9.1㎞(약 5시간)\n산행코스 : 백운동탐방지원센터-용기골-백운교(1,2,3,4)-백운암지-서성재-칠불봉-상왕봉 정상(우두봉)-토신골-가야산탐방지원센터(토신골공원 지킴터)-용탑선원-해인사-성보박물관-치인주차장 ",
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfo("가야산")));
+            }
         ),
       ),
       // INFO
@@ -124,6 +151,10 @@ class _MapsState extends State<Maps> {
         icon: _markerIcon,
         infoWindow: InfoWindow(
           title: '천성산',
+          snippet: "산행거리 : 약 10㎞(약 5시간)\n산행코스 : 내원사매표소주차장-중앙능선-천성산제2봉-짚북재-성불암계곡-내원사매표소주차장 ",
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfo("천성산")));
+            }
         ),
       ),
       // INFO
@@ -136,6 +167,10 @@ class _MapsState extends State<Maps> {
         icon: _markerIcon,
         infoWindow: InfoWindow(
           title: '덕룡산',
+          snippet: "산행거리 : 약 12㎞(약 9시간)\n산행코스 : 소석문-덕룡산 동봉-서봉-주작산-작천소령-401봉-오소재 ",
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfo("덕룡산")));
+            }
         ),
       ),
       // INFO
@@ -148,6 +183,10 @@ class _MapsState extends State<Maps> {
         icon: _markerIcon,
         infoWindow: InfoWindow(
           title: '황매산',
+          snippet: "산행거리 : 약 14㎞(약 6시간)\n산행코스 : 장박마을-975m봉-황매산 정상-베틀봉-장승 삼거리-목장-덕만주차장 ",
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfo("황매산")));
+            }
         ),
       ),
       // INFO
@@ -160,6 +199,10 @@ class _MapsState extends State<Maps> {
         icon: _markerIcon,
         infoWindow: InfoWindow(
           title: '무등산',
+          snippet: "산행거리 : 8㎞(약 5시간)\n산행코스 : 중지마을-샘터-장불재-입석대-서석대-중봉-중머리재-용추폭포삼거리-중지마을 ",
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfo("무등산")));
+            }
         ),
       ),
       // INFO

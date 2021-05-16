@@ -162,7 +162,9 @@ class _MountainInfoState extends State<MountainInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('${widget.mt_word} 검색 결과'),),
+      appBar: AppBar(
+        backgroundColor: Colors.cyan,
+        title: Text('${widget.mt_word} 검색 결과'),),
       body: _buildBody(),
 //      endDrawer: DrawerPage(),
       //resizeToAvoidBottomInset: false,

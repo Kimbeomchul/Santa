@@ -76,6 +76,7 @@ class _UserProfileState extends State<UserProfile> {
    }else if(LoginWith == 'Google'){
      final GoogleSignIn _googleSignIn = new GoogleSignIn();
      _googleSignIn.signOut();
+     _prefs.clear(); // SharedPrefer 키값 전부 삭 제 !
      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => KakaoLogin(),), (route) => false, ); //스택초기화 라우터
    }else{
      print("세션에러");
@@ -165,7 +166,38 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
+ profileList(){
+    return Container(
+      height: 450,
+      width: 500,
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemBuilder: lists,
+        itemCount: 10,
+      ),
+    );
+ }
 
+  Widget lists(BuildContext context, int index) {
+    return Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(padding: EdgeInsets.only(top:10,)),
+            Text('산에 가고싶은 날이네요..',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.5),),
+            Text('오늘 날씨가 좋아서 산에가고싶었지만 못갔슴다. 커피마시고파여 '),
+            Row(
+              children: [
+                Text('5분 전',style: TextStyle(fontSize: 11),),
+              ],
+            ),
+            Divider(),
+          ],
+        ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -269,9 +301,15 @@ class _UserProfileState extends State<UserProfile> {
                   height: 10,
                 ),
                 Padding(padding: EdgeInsets.only(left: 10,top: 10,bottom: 5),
-                child: _userText(), // 유저 아이디 , 이메일
+                  child: _userText(), // 유저 아이디 , 이메일
                 ),
-                Divider(color:Colors.black),
+                Divider(color:Colors.black,thickness: 1,),
+
+                // 디바이더 이후
+                // 에타형식
+
+                profileList(),
+
               ],
             ),
 
