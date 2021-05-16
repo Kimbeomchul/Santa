@@ -22,10 +22,12 @@ class _BoardListState extends State<BoardList> {
   Widget build(BuildContext context) {
     return WillPopScope(
         child: Scaffold(
-      appBar: AppBar(
+        appBar: AppBar(
+          backgroundColor: Colors.cyan,
+
         actions: [
           new IconButton(
-            icon: new Icon(Icons.search),
+            icon: new Icon(Icons.search,color: Colors.black54),
             tooltip: 'Search',
             onPressed: () => {
 

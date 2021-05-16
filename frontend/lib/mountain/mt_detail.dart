@@ -54,6 +54,7 @@ Widget detail_if(){
       detail_info = widget.mountain.mntidetails;
     }
     return ExpandablePanel(
+
       header: Text('상세 설명', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, letterSpacing: 0.27, color: Colors.cyan), ),
       expanded: Text(detail_info, softWrap: true, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300, color: Colors.black54),),
       tapHeaderToExpand: true,

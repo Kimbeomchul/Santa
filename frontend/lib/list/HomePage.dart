@@ -2,15 +2,19 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/all.dart';
+import 'package:santa_front/list/maps.dart';
 import 'package:santa_front/list/weather.dart';
 import 'package:santa_front/mountain/mt_info.dart';
+import 'package:santa_front/navigation/aboutus.dart';
 import 'package:santa_front/navigation/board_list.dart';
 import 'package:santa_front/main.dart';
 import 'package:santa_front/list/santa_recommand.dart';
 import 'package:santa_front/list/santa_smalltalk.dart';
 import 'package:http/http.dart' as http;
 import 'package:santa_front/users/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class HomePage extends StatefulWidget {
   @override
   HomePageState createState() => HomePageState();
@@ -19,10 +23,12 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   final mycontroller = TextEditingController();
+  FocusNode myFocusNode;
 
   bool gps;
-
   var weatherData;
+
+
 
   String url = 'http://api.openweathermap.org/data/2.5/weather?';
   String lat = '';
@@ -40,13 +46,85 @@ class HomePageState extends State<HomePage> {
   String _nickname = 'None';
   String LoginWith = '';
 
+  var googleEmail;
+  var googleId;
+  var googleImg;
+  var googleNickname;
+  SharedPreferences _prefs;
+  Future<bool> googleUser() async {
+    _prefs ??= await SharedPreferences.getInstance();
+    googleNickname = (_prefs.getString('googleNickname') ?? '');
+    googleImg = (_prefs.getString('googleImg') ?? '');
+    googleEmail = (_prefs.getString('googleEmail') ?? '');
+    googleId = (_prefs.getString('googleId') ?? '');
+    LoginWith = (_prefs.getString('LoginWith') ?? 'Kakao');
+    // print(googleNickname);
+    // print(googleImg);
+    // print(googleEmail);
+    // print(googleId);
+  }
+
+  _drawerInfo(){
+    var _currentImg = '';
+    var _currentId = '';
+    var _currentEmail = 'https://blog.kakaocdn.net/dn/cyOIpg/btqx7JTDRTq/1fs7MnKMK7nSbrM9QTIbE1/img.jpg' ;
+
+    if(LoginWith == "Google"){
+      _currentImg = googleImg;
+      _currentEmail = googleEmail;
+      _currentId = googleNickname;
+    }else if (LoginWith == "Kakao"){
+      _currentImg = _profile;
+      _currentEmail = _accountEmail;
+      _currentId = _nickname;
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        Container(
+          width:70,
+          height:70,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(image: NetworkImage(_currentImg),
+                  fit: BoxFit.cover)
+          ),
+        ),
+        Padding(padding: EdgeInsets.only(left:20,top:15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(_currentId,
+                style: TextStyle(
+                    fontSize: 18,
+                    color:Colors.black,
+                    fontWeight: FontWeight.bold
+                ),
+              ),
+              Text(_currentEmail,style: TextStyle(
+                  color: Colors.black
+              ),),
+            ],
+          ),
+        ),
+      ],
+    );
+
+  }
+
  // 로그아웃 구현
   LogOut(){
     Navigator.of(context, rootNavigator: true).pop('dialog');  //취소
     if (LoginWith == 'Kakao') {
       LogOutUser(); // 카카오 로그아웃
     }else if(LoginWith == 'Google'){
-      print("구글 로그아웃 구현하기 ");
+      final GoogleSignIn _googleSignIn = new GoogleSignIn();
+      _googleSignIn.signOut();
+      _prefs.clear(); // SharedPrefer 키값 전부 삭 제 !
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => KakaoLogin(),), (route) => false, ); //스택초기화 라우터
     }else{
       print("세션에러");
     }
@@ -64,10 +142,12 @@ class HomePageState extends State<HomePage> {
         _gender = user.kakaoAccount.gender.toString();
         _nickname =user.kakaoAccount.profile.nickname;
         _profile = user.kakaoAccount.profile.profileImageUrl.toString();
+        _userId = user.id.toString(); //유저아이디
+
       });
 
     } catch (e) {
-      print("NotKLogin");
+      print("Error With KakaoUserInfo");
     }
   }
 
@@ -95,7 +175,7 @@ class HomePageState extends State<HomePage> {
         print("로그아웃 실패 : $e");
       }
     }else{
-      print('GOOGLE LOGOUT 구현필요 ');
+      print('Err LogOutUser');
     }
   }
 
@@ -116,7 +196,8 @@ class HomePageState extends State<HomePage> {
       headers:  {"Accept" : "application/json"},
 
     );
-  //  print("ResponseBody : ${response.body}");
+    //print(url+lat+lon+appId+units);
+    // print("ResponseBody : ${response.body}");
     weatherData = jsonDecode(response.body);
 
     // if(weatherData['main']['temp']< 15){
@@ -132,10 +213,17 @@ class HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     permission(); // 날씨권
-    _KakaoUser();
+    _KakaoUser(); // 카카오 로그인
+    googleUser(); // 구글로그인
+    myFocusNode = FocusNode();
   }
 
-
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    myFocusNode.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +253,7 @@ class HomePageState extends State<HomePage> {
   }
 */
   _drawer(){
+    FocusScope.of(context).requestFocus(new FocusNode()); // 포커스 삭제
     return Drawer(
       child:  ListView(
         padding:  EdgeInsets.zero,
@@ -197,40 +286,8 @@ class HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width:70,
-                        height:70,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(image: NetworkImage(_profile),
-                                fit: BoxFit.cover)
-                        ),
-                      ),
-                      Padding(padding: EdgeInsets.only(left:20,top:15),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(_nickname,
-                            style: TextStyle(
-                                fontSize: 18,
-                                color:Colors.black,
-                                fontWeight: FontWeight.bold
-                            ),
-                          ),
-                          Text(_accountEmail,style: TextStyle(
-                              color: Colors.black
-                          ),),
-                        ],
-                      ),
-                      ),
+                  _drawerInfo(),   // Drawer Login User Info
 
-                    ],
-                  ),
                   SizedBox(
                    height: 10,
                   ),
@@ -245,11 +302,9 @@ class HomePageState extends State<HomePage> {
                   ),
                   Divider(color:Colors.black,thickness: 0.1),
                   ListTile(
-                    leading:Icon(Icons.star),
-                    title:Text("이벤트"),
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
+                    leading:Icon(Icons.email),
+                    title:Text("만든이"),
+                    onTap :  () => Navigator.push(context, MaterialPageRoute(builder: (context) => AboutUs())),
                   ),
                   Divider(color:Colors.black,thickness: 0.1,),
                   ListTile(
@@ -355,7 +410,7 @@ class HomePageState extends State<HomePage> {
 
                   GestureDetector(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SantaRec()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Maps()));
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -475,7 +530,6 @@ class HomePageState extends State<HomePage> {
   Widget homeheader() {
     return Stack(
       children: <Widget>[
-        //헤더? 같은 부분. sliver appbar 로 구현을 해야할 것 같긴 하나.. 어떻게 하지~~
 
         Container(
           width: MediaQuery.of(context).size.width,
@@ -500,7 +554,7 @@ class HomePageState extends State<HomePage> {
             child: Container(
 
               child: TextFormField(
-                //여기에 클릭을 하면 검색이 되도록!!! 할 수 있어야 한다능~
+                focusNode: myFocusNode,
                 cursorColor: Colors.cyan,
                 keyboardType: TextInputType.text,
                 controller: mycontroller,

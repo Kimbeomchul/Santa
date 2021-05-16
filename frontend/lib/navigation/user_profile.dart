@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:santa_front/users/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfile extends StatefulWidget {
 
@@ -20,6 +22,29 @@ class _UserProfileState extends State<UserProfile> {
   String userId = 'None';
   String nickname = 'None';
   String LoginWith = '';
+
+  var googleEmail;
+  var googleId;
+  var googleImg;
+  var googleNickname;
+  SharedPreferences _prefs;
+  Future<bool> googleUser() async {
+    _prefs ??= await SharedPreferences.getInstance();
+    setState(() {
+      LoginWith = (_prefs.getString('LoginWith') ?? 'Kakao');
+      googleNickname = (_prefs.getString('googleNickname') ?? '');
+      googleImg = (_prefs.getString('googleImg') ?? '');
+      googleEmail = (_prefs.getString('googleEmail') ?? '');
+      googleId = (_prefs.getString('googleId') ?? '');
+    });
+    // print(googleNickname);
+    // print(googleImg);
+    // print(googleEmail);
+    // print(googleId);
+    if (LoginWith == 'Kakao'){
+      KakaoUser();
+    }
+  }
 //카카오 유저 정보 가져오기
   Future KakaoUser() async {
     try {
@@ -35,21 +60,24 @@ class _UserProfileState extends State<UserProfile> {
       });
 
     } catch (e) {
-      print("NotKLogin");
+      print("Google & Kakao Login Error ");
     }
   }
 
   @override
   void initState(){
     super.initState();
-    KakaoUser();
+    googleUser();  //
   }
  LogOut(){
    Navigator.of(context, rootNavigator: true).pop('dialog');  //취소
    if (LoginWith == 'Kakao') {
      LogOutUser(); // 카카오 로그아웃
    }else if(LoginWith == 'Google'){
-     print("구글 로그아웃 구현하기 ");
+     final GoogleSignIn _googleSignIn = new GoogleSignIn();
+     _googleSignIn.signOut();
+     _prefs.clear(); // SharedPrefer 키값 전부 삭 제 !
+     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => KakaoLogin(),), (route) => false, ); //스택초기화 라우터
    }else{
      print("세션에러");
    }
@@ -84,57 +112,92 @@ class _UserProfileState extends State<UserProfile> {
       ],
     );
   }
-
-// 유저 프로필 사진
-  Widget _userImg(){
-    if (profile != 'None') {
-      return Container(
-        width: 100,
-        height: 100,
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey[500],
-              offset: Offset(4.0, 4.0),
-              blurRadius: 15.0,
-              spreadRadius: 1.0,
-            ),
-          ],
-          shape: BoxShape.circle,
-
-          image: DecorationImage(
-              image: NetworkImage(profile),
-              fit: BoxFit.cover
-          ),
-
-        ),
-      );
-    }else{
-      return Container(
-        width: 100,
-        height: 100,
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey[500],
-              offset: Offset(4.0, 4.0),
-              blurRadius: 15.0,
-              spreadRadius: 1.0,
-            ),
-          ],
-          shape: BoxShape.circle,
-
-          image: DecorationImage(
-              image: NetworkImage('https://blog.kakaocdn.net/dn/cyOIpg/btqx7JTDRTq/1fs7MnKMK7nSbrM9QTIbE1/img.jpg'),  //임시 투명이미지
-              fit: BoxFit.cover
-          ),
-
-        ),
-      );
+  Widget _userText(){
+    var _curId = '';
+    var _curEmail ='';
+    if (LoginWith == 'Kakao') {
+      _curId = nickname;
+      _curEmail = accountEmail;
+    }else if (LoginWith == 'Google'){
+      _curId = googleNickname;
+      _curEmail = googleEmail;
     }
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        Text(_curId,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
+        Text(_curEmail,style: TextStyle(fontSize: 15),),
+      ],
+    );
+
+
+  }
+// 유저 프로필 사진
+   Widget _userImg() {
+    var _curImg ='https://blog.kakaocdn.net/dn/cyOIpg/btqx7JTDRTq/1fs7MnKMK7nSbrM9QTIbE1/img.jpg';
+    if (LoginWith == 'Kakao') {
+      _curImg = profile;
+    }else if (LoginWith == 'Google'){
+      _curImg = googleImg;
+    }
+
+    return Container(
+      width: 100,
+      height: 100,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey[500],
+            offset: Offset(4.0, 4.0),
+            blurRadius: 15.0,
+            spreadRadius: 1.0,
+          ),
+        ],
+        shape: BoxShape.circle,
+
+        image: DecorationImage(
+            image: NetworkImage(_curImg),
+            fit: BoxFit.cover
+        ),
+
+      ),
+    );
   }
 
+ profileList(){
+    return Container(
+      height: 450,
+      width: 500,
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        itemBuilder: lists,
+        itemCount: 10,
+      ),
+    );
+ }
 
+  Widget lists(BuildContext context, int index) {
+    return Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(padding: EdgeInsets.only(top:10,)),
+            Text('산에 가고싶은 날이네요..',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.5),),
+            Text('오늘 날씨가 좋아서 산에가고싶었지만 못갔슴다. 커피마시고파여 '),
+            Row(
+              children: [
+                Text('5분 전',style: TextStyle(fontSize: 11),),
+              ],
+            ),
+            Divider(),
+          ],
+        ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -238,17 +301,15 @@ class _UserProfileState extends State<UserProfile> {
                   height: 10,
                 ),
                 Padding(padding: EdgeInsets.only(left: 10,top: 10,bottom: 5),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  child: _userText(), // 유저 아이디 , 이메일
+                ),
+                Divider(color:Colors.black,thickness: 1,),
 
-                    Text(nickname,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),
-                    Text(accountEmail,style: TextStyle(fontSize: 15),),
-                  ],
-                ),
-                ),
-                Divider(color:Colors.black),
+                // 디바이더 이후
+                // 에타형식
+
+                profileList(),
+
               ],
             ),
 
