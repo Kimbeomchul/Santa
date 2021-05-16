@@ -8,13 +8,15 @@ class UserChat extends StatefulWidget {
 class _UserChatState extends State<UserChat> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        child:Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text("채팅"),
         ],
       ),
+        ),
     );
   }
 }

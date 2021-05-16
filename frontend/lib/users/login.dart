@@ -1,10 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import '../navigation_route.dart';
 
 class KakaoLogin extends StatelessWidget {
   @override
@@ -29,58 +29,88 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
+  var googleEmail;
+  var googleId;
+  var googleImg;
+  var googleNickname;
+  SharedPreferences _prefs;
 
   bool _isKakaoTalkInstalled = false; // 카카오톡 설치여부 bool
-  var url = 'http://127.0.0.1:8000/dj-rest-auth/google/';
+
 
   // 구글 로그인  -- Start
-  void LoginWithGoogle() async {
+
+
+   LoginWithGoogle() async {
     GoogleSignIn _googleSignIn = GoogleSignIn(
       scopes: [
         'email',
         // you can add extras if you require
       ],
+      clientId: 'AIzaSyAVw5ZxEo5vyt1Qry7BNyFIZGMHgeP5Vjk',
     );
 
 
     _googleSignIn.signIn().then((GoogleSignInAccount acc) async {
       GoogleSignInAuthentication auth = await acc.authentication;
-      print(acc.id);
-      print(acc.email);
-      print(acc.displayName);
-      print(acc.photoUrl);
+      if(acc.id != null || acc.email != null || acc.photoUrl != null){
+        // _prefs.setString('googleId', acc.id);
+        // _prefs.setString('googleEmail', acc.email);
+        // _prefs.setString('googleImg', acc.photoUrl);
+        _prefs ??= await SharedPreferences.getInstance();
+        await _prefs.setString('googleNickname', acc.displayName);
+        await _prefs.setString('googleImg', acc.photoUrl);
+        await _prefs.setString('googleEmail', acc.email);
+        await _prefs.setString('googleId', acc.id);
+        await _prefs.setString('LoginWith', 'Google');
+
+        // googleNickname = (_prefs.getString('googleNickname') ?? '');
+        // print(googleNickname);
+        // googleImg = (_prefs.getString('googleImg') ?? '');
+        // print(googleImg);
+        // googleEmail = (_prefs.getString('googleEmail') ?? '');
+        // print(googleEmail);
+        // googleId = (_prefs.getString('googleId') ?? '');
+        // print(googleId);
+
+      }
+
 
       acc.authentication.then((GoogleSignInAuthentication auth) async {
         print(auth.idToken);
-        print(auth.accessToken );
+        print(auth.accessToken);
 
-        final response = await http.post(
-          'http://127.0.0.1:8000/dj-rest-auth/google/',
-          headers: {
-            "Content-Type": "application/json",
-            'Accept': 'application/json',
-          },
-          body: jsonEncode(
-            {
-              "access_token": auth.accessToken,
-              "code": '',
-              "id_token": auth.idToken,
-            }
-          ),
-        );
-        if (response.statusCode == 200){
-          print(response);
-          print(jsonDecode(response.body)['key']);
+        // final response = await http.post(
+        //   'http://127.0.0.1:8000/dj-rest-auth/google/',
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //     'Accept': 'application/json',
+        //   },
+        //   body: jsonEncode(
+        //     {
+        //       "access_token": auth.accessToken,
+        //       "code": '',
+        //       "id_token": auth.idToken,
+        //     }
+        //   ),
+        // );
+        // if (response.statusCode == 200){
+        //   print(response);
+        //   print(jsonDecode(response.body)['key']);
+        //
+        // }
+        // else{
+        //   throw Exception('구글 로그인 실패');
+        // }
 
-        }
-        else{
-          throw Exception('구글 로그인 실패');
-        }
       });
+
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => NavigationRouter(),), (route) => false, ); //스택초기화 라우터
     });
 
   }
+
+
   // 구글 로그인 -- End
 
 
@@ -125,10 +155,8 @@ class _LoginPageState extends State<LoginPage> {
       print(token);
       // var code = await AuthCodeClient.instance.requestWithTalk();
       //print(code + ' == KAKAO AUTH TOKEN');
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LoginDone()),
-      );
+
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => NavigationRouter(),), (route) => false, ); //스택초기화 라우터
     } catch (e) {
       print("토큰 획득실패 _issueAccessToken() : $e");
     }
@@ -193,16 +221,26 @@ class _LoginPageState extends State<LoginPage> {
       //   ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: 50),),
-            RaisedButton(
-                child: Text("카카오톡 로그인"),
-                onPressed:
-                _isKakaoTalkInstalled ? _loginWithTalk : _loginWithKakao),
-            RaisedButton(
-                child: Text("구글 로그인 "),
-                onPressed:LoginWithGoogle,
-                ),
+
+            Container(
+              child:
+              Image.asset('images/Design.jpeg' ,fit: BoxFit.cover,),
+            ),
+            Padding(padding: EdgeInsets.only(top: 100),),
+
+            GestureDetector(
+              child:
+              Image.asset('images/loginK.png' ,fit: BoxFit.cover,),
+              onTap: _isKakaoTalkInstalled ? _loginWithTalk : _loginWithKakao,
+            ),
+            GestureDetector(
+              child:
+              Image.asset('images/loginG.png' ,fit: BoxFit.cover,),
+              onTap: LoginWithGoogle,
+            ),
             RaisedButton(
               child: Text("Logout"),
               onPressed: logOutTalk,
@@ -214,26 +252,3 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class LoginDone extends StatelessWidget {
-  Future<bool> _getUser() async {
-    try {
-      User user = await UserApi.instance.me(); // 유저정보
-      print(user.toString());
-    } on KakaoAuthException catch (e) {
-    } catch (e) {
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    _getUser();
-
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Text('Login Success!'),
-        ),
-      ),
-    );
-  }
-}

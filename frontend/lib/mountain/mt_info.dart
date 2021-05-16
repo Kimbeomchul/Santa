@@ -4,13 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:santa_front/list/HomePage.dart';
 import 'package:santa_front/mountain/mt_detail.dart';
+import 'package:santa_front/users/login.dart';
 import 'dart:async';
+import '../alert.dart';
 import 'mountain_model.dart';
 import 'package:santa_front/pk_skeleton.dart';
 
+
 //
 //
-// Todo = _buildBody에서 타임아웃 설정해야함 ELSE부분.. 무한로딩중
+// Todo = _buildBody에서 타임아웃 설정해야함 ELSE부분.. 무한로딩중 완료
 //
 //
 
@@ -29,6 +32,7 @@ class _MountainInfoState extends State<MountainInfo> {
   var decode_data;
   var deep_info;
 
+
   //
   // var img_data;
   // var decode_img_data;
@@ -44,7 +48,6 @@ class _MountainInfoState extends State<MountainInfo> {
   final String mt_key = 'pnpnaretHrGHzfUsPt1RVDcThKijR7FalZPJqZUcdWH1hN3CX0W/q//knP/FY5b5PlrkxRqfsJjSjzlUdj/j7g==';
   String url = 'http://apis.data.go.kr/1400000/service/cultureInfoService/';
   String serviceId = 'mntInfoOpenAPI?serviceKey=';
-
 
 
   @override
@@ -64,8 +67,12 @@ class _MountainInfoState extends State<MountainInfo> {
     );
     mt_data = utf8.decode(response.bodyBytes);
     decode_data = jsonDecode(mt_data);
-    print(decode_data);
-    deep_info = decode_data['response']['body']['items']['item'];
+
+    try {
+      deep_info = decode_data['response']['body']['items']['item'];
+    } catch(e){
+      return _AlertError();
+    }
     //print(deep_info);
 
     if (!(deep_info is List)) {
@@ -103,10 +110,14 @@ class _MountainInfoState extends State<MountainInfo> {
     }
 
 
+
     return deep_info;
   }
 
 
+ Widget _AlertError(){
+    Navigator.push(context, MaterialPageRoute(builder: (context) => AlertPage()));
+ }
   //
   // Scaffold(
   // floatingActionButton: FloatingActionButton(
@@ -138,6 +149,15 @@ class _MountainInfoState extends State<MountainInfo> {
   // //   },
   // // ),
   // );
+  //    //산 이미지정보
+  //     http.Response responseImg = await http.get(
+  //       Uri.encodeFull(url + imgServiceId + mt_key +'&searchWrd='+ widget.mt_word ),
+  //       headers: {"Accept": "application/json"},
+  //
+  //     );
+  //     mt_img = utf8.decode(responseImg.bodyBytes);
+  //     decode_img = jsonDecode(mt_img);
+  //     print('image  ='+ decode_img);
 
   @override
   Widget build(BuildContext context) {

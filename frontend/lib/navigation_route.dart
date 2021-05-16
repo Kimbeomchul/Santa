@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk/all.dart';
 import 'package:santa_front/navigation/chat.dart';
 
 import 'navigation/board_list.dart';
@@ -12,9 +13,12 @@ class NavigationRouter extends StatefulWidget {
 
 class _NavigationRouterState extends State<NavigationRouter> {
   int _selectedIndex = 0;
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+       child: Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,
@@ -50,6 +54,7 @@ class _NavigationRouterState extends State<NavigationRouter> {
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
+        ),
     );
   }
 

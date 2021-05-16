@@ -2,6 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kakao_flutter_sdk/all.dart';
+import 'package:santa_front/list/maps.dart';
 import 'package:santa_front/list/weather.dart';
 import 'package:santa_front/mountain/mt_info.dart';
 import 'package:santa_front/navigation/board_list.dart';
@@ -9,6 +12,8 @@ import 'package:santa_front/main.dart';
 import 'package:santa_front/list/santa_recommand.dart';
 import 'package:santa_front/list/santa_smalltalk.dart';
 import 'package:http/http.dart' as http;
+import 'package:santa_front/users/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class HomePage extends StatefulWidget {
   @override
   HomePageState createState() => HomePageState();
@@ -18,9 +23,11 @@ class HomePageState extends State<HomePage> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   final mycontroller = TextEditingController();
 
-  bool gps;
 
+  bool gps;
   var weatherData;
+
+
 
   String url = 'http://api.openweathermap.org/data/2.5/weather?';
   String lat = '';
@@ -30,6 +37,115 @@ class HomePageState extends State<HomePage> {
 
 
 
+  String _accountEmail = 'None';
+  String _ageRange = 'None';
+  String _gender = 'None';
+  String _profile = 'None';
+  String _userId = 'None';
+  String _nickname = 'None';
+  String LoginWith = '';
+
+  var googleEmail;
+  var googleId;
+  var googleImg;
+  var googleNickname;
+  SharedPreferences _prefs;
+  Future<bool> googleUser() async {
+    _prefs ??= await SharedPreferences.getInstance();
+    googleNickname = (_prefs.getString('googleNickname') ?? '');
+    googleImg = (_prefs.getString('googleImg') ?? '');
+    googleEmail = (_prefs.getString('googleEmail') ?? '');
+    googleId = (_prefs.getString('googleId') ?? '');
+    LoginWith = (_prefs.getString('LoginWith') ?? 'Kakao');
+    // print(googleNickname);
+    // print(googleImg);
+    // print(googleEmail);
+    // print(googleId);
+  }
+
+  _drawerInfo(){
+    var _currentImg = '';
+    var _currentId = '';
+    var _currentEmail = 'https://blog.kakaocdn.net/dn/cyOIpg/btqx7JTDRTq/1fs7MnKMK7nSbrM9QTIbE1/img.jpg' ;
+
+    if(LoginWith == "Google"){
+      _currentImg = googleImg;
+      _currentEmail = googleEmail;
+      _currentId = googleNickname;
+    }else if (LoginWith == "Kakao"){
+      _currentImg = _profile;
+      _currentEmail = _accountEmail;
+      _currentId = _nickname;
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        Container(
+          width:70,
+          height:70,
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(image: NetworkImage(_currentImg),
+                  fit: BoxFit.cover)
+          ),
+        ),
+        Padding(padding: EdgeInsets.only(left:20,top:15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(_currentId,
+                style: TextStyle(
+                    fontSize: 18,
+                    color:Colors.black,
+                    fontWeight: FontWeight.bold
+                ),
+              ),
+              Text(_currentEmail,style: TextStyle(
+                  color: Colors.black
+              ),),
+            ],
+          ),
+        ),
+      ],
+    );
+
+  }
+
+ // 로그아웃 구현
+  LogOut(){
+    Navigator.of(context, rootNavigator: true).pop('dialog');  //취소
+    if (LoginWith == 'Kakao') {
+      LogOutUser(); // 카카오 로그아웃
+    }else if(LoginWith == 'Google'){
+      final GoogleSignIn _googleSignIn = new GoogleSignIn();
+      _googleSignIn.signOut();
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => KakaoLogin(),), (route) => false, ); //스택초기화 라우터
+    }else{
+      print("세션에러");
+    }
+  }
+
+//카카오 유저 정보 가져오기
+  Future _KakaoUser() async {
+    try {
+      User user = await UserApi.instance.me(); // 유저정보
+    //  print(user.toString());
+      setState(() {
+        LoginWith = 'Kakao';
+        _accountEmail = user.kakaoAccount.email;
+        _ageRange = user.kakaoAccount.ageRange.toString();
+        _gender = user.kakaoAccount.gender.toString();
+        _nickname =user.kakaoAccount.profile.nickname;
+        _profile = user.kakaoAccount.profile.profileImageUrl.toString();
+      });
+
+    } catch (e) {
+      print("Error With KakaoUserInfo");
+    }
+  }
 
   void permission()async{ // 위치권환 획득 < 날씨 >
     await requestPermission();
@@ -44,8 +160,19 @@ class HomePageState extends State<HomePage> {
       }
     });
   }
-  _title(){
-    return 'Lorem Ipsum Title';
+
+  LogOutUser() async {   // 로그아웃 로직
+    if(_nickname != 'None'){
+      try {
+        var code = await UserApi.instance.logout();
+        print(code.toString());
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => KakaoLogin(),), (route) => false, ); //스택초기화 라우터
+      } catch (e) {
+        print("로그아웃 실패 : $e");
+      }
+    }else{
+      print('GOOGLE LOGOUT 구현필요 ');
+    }
   }
 
   Future<Null> _onRefresh()async{ // Drawer
@@ -56,7 +183,7 @@ class HomePageState extends State<HomePage> {
 
   Future getData()async{
     Position position = await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    print(position);
+   // print(position);
     lat = "lat=" + position.latitude.toString() + '&';
     lon = "lon=" + position.longitude.toString() + '&';
 
@@ -65,14 +192,14 @@ class HomePageState extends State<HomePage> {
       headers:  {"Accept" : "application/json"},
 
     );
-    print("ResponseBody : ${response.body}");
+  //  print("ResponseBody : ${response.body}");
     weatherData = jsonDecode(response.body);
 
-    if(weatherData['main']['temp']< 15){
-      print('추웡');
-    }else{
-      print("더웡");
-    }
+    // if(weatherData['main']['temp']< 15){
+    //   print('추웡');
+    // }else{
+    //   print("더웡");
+    // }
 
     return weatherData;
   }
@@ -81,13 +208,16 @@ class HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     permission(); // 날씨권
+    _KakaoUser(); // 카카오 로그인
+    googleUser(); // 구글로그인
   }
 
 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      child: Scaffold(
       key: scaffoldKey,
       drawer : _drawer(),
 
@@ -100,6 +230,7 @@ class HomePageState extends State<HomePage> {
       //   child: Icon(Icons.add, color: Colors.white,),
       //   backgroundColor: Colors.black,
       // ),
+    ),
     );
   }
 
@@ -143,37 +274,49 @@ class HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width:50,
-                    height:50,
-                    decoration: BoxDecoration(
-                      shape:  BoxShape.circle,
-                      image: DecorationImage(
-                          fit:BoxFit.fill,
-                          image : AssetImage('images/santalogo.png'),
-                      ),
-                    ),
-                  ),
+                  _drawerInfo(),   // Drawer Login User Info
+
                   SizedBox(
                    height: 10,
                   ),
-                  Text('ID가 들어갈자리 , ex) Santa',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color:Colors.black,
-                    fontWeight: FontWeight.bold
-                  ),
-                  ),
-                  Text("이메일이 들어갈자리 , ex) abc@abc.com ",style: TextStyle(
-                    color: Colors.black
-                  ),),
-                Divider(color:Colors.black),
+
+                Divider(color:Colors.black,thickness: 0.5,),
                   ListTile(
                     leading:Icon(Icons.settings),
-                    title:Text("settings"),
+                    title:Text("설정"),
                     onTap: (){
                       Navigator.pop(context);
                     },
+                  ),
+                  Divider(color:Colors.black,thickness: 0.1),
+                  ListTile(
+                    leading:Icon(Icons.star),
+                    title:Text("이벤트"),
+                    onTap: (){
+                      Navigator.pop(context);
+                    },
+                  ),
+                  Divider(color:Colors.black,thickness: 0.1,),
+                  ListTile(
+                    leading:Icon(Icons.logout),
+                    title:Text("로그아웃"),
+                    onTap :  () => showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text('로그아웃 하시겠습니까?'),
+                            actions: [
+                              FlatButton(
+                                onPressed: () => Navigator.of(context, rootNavigator: true).pop('dialog'),  //취소
+                                child: Text('취소'),
+                              ),
+                              FlatButton(
+                                onPressed: () => LogOut(), // passing true
+                                child: Text('로그아웃'),
+                              ),
+                            ],
+                          );
+                        }),
                   ),
 
                 ],
@@ -257,7 +400,7 @@ class HomePageState extends State<HomePage> {
 
                   GestureDetector(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SantaRec()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => Maps()));
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
