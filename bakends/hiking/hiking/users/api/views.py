@@ -1,8 +1,11 @@
-
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.kakao.views import KakaoOAuth2Adapter
 from django.contrib.auth import get_user_model
 from dj_rest_auth.registration.views import SocialLoginView
+from dj_rest_auth.registration.serializers import (SocialAccountSerializer,
+                                                   SocialConnectSerializer,
+                                                   SocialLoginSerializer,
+                                                   VerifyEmailSerializer)
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
@@ -30,6 +33,7 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericV
 
 class GoogleLogin(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
+    # serializer_class = SocialLoginSerializer
 
 
 class KaKaoLogin(SocialLoginView):

@@ -73,8 +73,8 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "rest_framework",
     "rest_framework.authtoken",
-    "rest_auth",
     "dj_rest_auth",
+    "dj_rest_auth.registration",
     "corsheaders",
 
     # provider
@@ -274,15 +274,16 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION = "none"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ADAPTER = "hiking.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = "hiking.users.adapters.SocialAccountAdapter"
-SOCIALACCOUNT_AUTO_SIGNUP = False
-ACCOUNT_SIGNUP_FORM_CLASS = 'hiking.users.forms.SignupForm'
-# <- 아래에서 기술할 회원가입 폼을 사용
-
+SOCIALACCOUNT_AUTO_SIGNUP = True
+# ACCOUNT_SIGNUP_FORM_CLASS = "hiking.users.forms.SignupForm"
+# SOCIALACCOUNT_FORMS = {
+#     'signup': 'hiking.users.forms.SignupForm',
+# }
 
 # django-rest-framework
 # -------------------------------------------------------------------------------
