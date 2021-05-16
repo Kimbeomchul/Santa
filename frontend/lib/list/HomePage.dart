@@ -391,7 +391,7 @@ class HomePageState extends State<HomePage> {
                       :IconButton(
                          icon: Icon(Icons.gps_not_fixed),
                          onPressed: (){
-                            scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("위치정보를 받는중 에러가 발생하였습니다.")));
+                            scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("위치정보를 받아올 수 없습니다. 잠시후 다시 시도해주세요.")));
                     },
                   ),
                   //Text('show more', style: TextStyle(color: Colors.cyan),),

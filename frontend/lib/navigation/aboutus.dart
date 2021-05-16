@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../FadeAnimation.dart';
 
 class AboutUs extends StatefulWidget {
@@ -84,16 +85,57 @@ class _AboutUsState extends State<AboutUs> {
                         FadeAnimation(1.6,
                             Text("Developer", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),)
                         ),
-                        SizedBox(height: 10,),
-
-                        FadeAnimation(1.6,
-                            Text("김범철 ", style: TextStyle(color: Colors.grey),)
+                        SizedBox(height: 4,),
+                        Row(
+                          children: [
+                            FadeAnimation(1.6,
+                                Text("김범철 ", style: TextStyle(color: Colors.grey,fontSize: 14),)
+                            ),
+                            FadeAnimation(1.6,
+                                IconButton(
+                                  // Use the MdiIcons class for the IconData
+                                    icon: new Icon(MdiIcons.instagram,color: Colors.grey,),
+                                    onPressed: () {
+                                      launch('https://www.instagram.com/m_ozz_i/', forceWebView: true, forceSafariVC: true); //범철 인스타
+                                    }
+                                ),
+                            ),
+                            FadeAnimation(1.6,
+                              IconButton(
+                                // Use the MdiIcons class for the IconData
+                                  icon: new Icon(MdiIcons.github,color: Colors.grey,),
+                                  onPressed: () {
+                                    launch('https://github.com/Kimbeomchul', forceWebView: true, forceSafariVC: true);//범철 깃허브이동
+                                  }
+                              ),
+                            ),
+                          ],
                         ),
-                        Padding(padding: EdgeInsets.only(top: 5)),
-                        FadeAnimation(1.6,
-                            Text("윤준기 ", style: TextStyle(color: Colors.grey),)
+                        Row(
+                          children: [
+                            FadeAnimation(1.6,
+                                Text("윤준기 ", style: TextStyle(color: Colors.grey,fontSize: 14),)
+                            ),
+                            FadeAnimation(1.6,
+                              IconButton(
+                                // Use the MdiIcons class for the IconData
+                                  icon: new Icon(MdiIcons.instagram,color: Colors.grey,),
+                                  onPressed: () {
+                                    launch('https://www.instagram.com/leffe_pt/', forceWebView: true, forceSafariVC: true); //준기 인스타
+                                  }
+                              ),
+                            ),
+                            FadeAnimation(1.6,
+                              IconButton(
+                                // Use the MdiIcons class for the IconData
+                                  icon: new Icon(MdiIcons.github,color: Colors.grey,),
+                                  onPressed: () {
+                                    launch('https://github.com/na86421', forceWebView: true, forceSafariVC: true);//준기  깃허브이동
+                                  }
+                              ),
+                            ),
+                          ],
                         ),
-
                         SizedBox(height: 20,),
                         FadeAnimation(1.6,
                             Text("Used", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),)
@@ -104,6 +146,21 @@ class _AboutUsState extends State<AboutUs> {
                         ),
                         FadeAnimation(1.6,
                             Text("Backend : Django", style: TextStyle(color: Colors.grey),)
+                        ),
+                        FadeAnimation(1.6,
+                            Text("Database : Postgre", style: TextStyle(color: Colors.grey),)
+                        ),
+                        FadeAnimation(1.6,
+                            Text("Server : Google Cloud Platform", style: TextStyle(color: Colors.grey),)
+                        ),
+                        FadeAnimation(1.6,
+                            Text("Version : Github", style: TextStyle(color: Colors.grey),)
+                        ),
+                        FadeAnimation(1.6,
+                            Text("Chat : Notion / Slack", style: TextStyle(color: Colors.grey),)
+                        ),
+                        FadeAnimation(1.6,
+                            Text("Others : Docker , Jenkins , Jira", style: TextStyle(color: Colors.grey),)
                         ),
                         SizedBox(height: 120,)
                       ],
@@ -124,45 +181,23 @@ class _AboutUsState extends State<AboutUs> {
                     height: 50,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-                        color: Colors.yellow[700]
+                        color: Colors.cyan[600]
                     ),
-                    child: Align(child: Text("후원하기", style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 15),)),
+                    child:
+                    Align(
+                        child: GestureDetector(
+                          onTap: () => {
+                            // 결제시스템 구현하기
+                          },
+                          child: Text("후원하기", style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 15),),
+                        ),
+                    ),
                   ),
                 ),
               ),
             ),
           )
         ],
-      ),
-    );
-  }
-
-  Widget makeVideo({image}) {
-    return AspectRatio(
-      aspectRatio: 1.5/ 1,
-      child: Container(
-        margin: EdgeInsets.only(right: 20),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            image: DecorationImage(
-                image: AssetImage(image),
-                fit: BoxFit.cover
-            )
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  begin: Alignment.bottomRight,
-                  colors: [
-                    Colors.black.withOpacity(.9),
-                    Colors.black.withOpacity(.3)
-                  ]
-              )
-          ),
-          child: Align(
-            child: Icon(Icons.play_arrow, color: Colors.white, size: 70,),
-          ),
-        ),
       ),
     );
   }
