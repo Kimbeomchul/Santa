@@ -169,8 +169,8 @@ class _UserProfileState extends State<UserProfile> {
 
  profileList(){
     return Container(
-      height: 450,
-      width: 500,
+      height: 400,
+      width: 450,
       child: ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
@@ -301,15 +301,32 @@ class _UserProfileState extends State<UserProfile> {
                 SizedBox(
                   height: 10,
                 ),
-                Padding(padding: EdgeInsets.only(left: 10,top: 10,bottom: 5),
+                Padding(padding: EdgeInsets.only(left: 10,top: 10,bottom: 10),
                   child: _userText(), // 유저 아이디 , 이메일
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 350,
+                      child:  OutlinedButton(
+                        onPressed: () {},
+                        child: Text('내정보 수정',
+                            style: TextStyle(
+                                color: Colors.black, fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+
+                  ],
                 ),
                 Divider(color:Colors.black,thickness: 1,),
 
                 // 디바이더 이후
                 // 에타형식
 
-                profileList(),
+                profileList(), // 내글
 
               ],
             ),

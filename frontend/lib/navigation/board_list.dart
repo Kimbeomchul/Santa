@@ -15,29 +15,29 @@ class BoardList extends StatefulWidget {
 
 
 
-
-
-
 class _BoardListState extends State<BoardList> {
+
   @override
   Widget build(BuildContext context) {
+
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return WillPopScope(
         child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.cyan,
-
-        actions: [
-          new IconButton(
-            icon: new Icon(Icons.search,color: Colors.black54),
-            tooltip: 'Search',
-            onPressed: () => {
-
-
-            },
-          ),
-        ],
-      ),
+          appBar: _buildBar(context),
+      //   appBar: AppBar(
+      //     backgroundColor: Colors.cyan,
+      //
+      //   actions: [
+      //     new IconButton(
+      //       icon: new Icon(Icons.search,color: Colors.black54),
+      //       tooltip: 'Search',
+      //       onPressed: () => {
+      //
+      //
+      //       },
+      //     ),
+      //   ],
+      // ),
       body: _buildBody(),
        floatingActionButton: FloatingActionButton(
          onPressed: (){
@@ -52,6 +52,10 @@ class _BoardListState extends State<BoardList> {
 
 
 }
+
+
+
+
 Widget _buildBody() {
 //  if (게시판 글 수 .length != 0) {
     return ListView.builder(
