@@ -35,15 +35,21 @@ class _BoardWriteState extends State<BoardWrite> {
         ],
       ),
       body: Container(
+        padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
             TextField(
                 controller: TitleController,
                 decoration: InputDecoration(
+                  border: OutlineInputBorder(),
                   labelText: '제목',
                 ),
             ),
+            Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 30)),
             TextField(
+                keyboardType: TextInputType.multiline,
+                minLines: 1,//Normal textInputField will be displayed
+                maxLines: 25,// when user presses enter it will adapt to it
                 controller: ContentController,
                 decoration: InputDecoration(
                   labelText: '글내용',
