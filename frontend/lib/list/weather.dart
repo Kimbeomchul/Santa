@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:santa_front/list/HomePage.dart';
@@ -18,6 +19,7 @@ class _WeatherPageState extends State<WeatherPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return Scaffold(
 
       body: Container(
@@ -162,7 +164,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                 ),
                                 Column(
                                 children:[
-                                  Text('흐림도',style: TextStyle(color: Colors.white,fontSize: 14),),
+                                  Text('시안성',style: TextStyle(color: Colors.white,fontSize: 14),),
                                   Text('  ${widget.Data['clouds']['all']} %',style: TextStyle(color: Colors.white,fontSize: 16),),
 
                                 ],
@@ -213,8 +215,8 @@ class _WeatherPageState extends State<WeatherPage> {
 
                                 Column(
                                   children:[
-                                    Text('강수량',style: TextStyle(color: Colors.white,fontSize: 14),),
-                                    Text('${widget.Data['rain']['1h']} mm',style: TextStyle(color: Colors.white,fontSize: 16),),
+                                    Text('뭘까이건',style: TextStyle(color: Colors.white,fontSize: 14),),
+                                    Text('${widget.Data['visibility']} ',style: TextStyle(color: Colors.white,fontSize: 16),),
 
                                   ],
                                 ),

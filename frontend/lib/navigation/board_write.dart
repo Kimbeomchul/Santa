@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 
 class BoardWrite extends StatefulWidget {
@@ -12,6 +13,7 @@ class _BoardWriteState extends State<BoardWrite> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return Scaffold(
       appBar: AppBar(
         actions: [

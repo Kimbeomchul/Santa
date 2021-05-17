@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:santa_front/navigation/board_detail.dart';
 
 import 'board_write.dart';
@@ -20,6 +21,7 @@ class BoardList extends StatefulWidget {
 class _BoardListState extends State<BoardList> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return WillPopScope(
         child: Scaffold(
         appBar: AppBar(

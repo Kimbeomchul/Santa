@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 
 class BoardDetail extends StatefulWidget {
@@ -9,6 +10,7 @@ class BoardDetail extends StatefulWidget {
 class _BoardDetailState extends State<BoardDetail> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.grey,

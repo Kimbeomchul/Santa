@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class UserChat extends StatefulWidget {
   @override
@@ -8,6 +9,7 @@ class UserChat extends StatefulWidget {
 class _UserChatState extends State<UserChat> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return WillPopScope(
         child:Scaffold(
       body: Column(
