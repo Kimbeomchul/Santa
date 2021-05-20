@@ -117,7 +117,7 @@ class _WeatherPageState extends State<WeatherPage> {
                     Row(
                       children: [
                         Text(
-                          '체 ',
+                          '체감 ',
                           style: TextStyle(
                               fontSize: 11,
                               color: Colors.white,

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/all.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:santa_front/list/maps.dart';
 import 'package:santa_front/list/weather.dart';
 import 'package:santa_front/mountain/mt_info.dart';
@@ -228,7 +229,7 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정 
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return WillPopScope(
       child: Scaffold(
       key: scaffoldKey,
@@ -409,7 +410,9 @@ class HomePageState extends State<HomePage> {
 
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-
+                  Row(
+                  children:[
+                    Padding(padding: EdgeInsets.only(left: 8)),
                   GestureDetector(
                     onTap: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context) => Maps()));
@@ -418,12 +421,14 @@ class HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          child: Icon(Icons.map_outlined, size: 55,),
+                          child: Icon(MdiIcons.mapMarkerRadiusOutline, size: 40,),
                         ),
                         Padding(padding: EdgeInsets.all(5),),
                         Text('지도'), // 서브메뉴 1
                       ],
                     ),
+                  ),
+                  ],
                   ),
                   GestureDetector(
                     onTap: (){
@@ -433,27 +438,34 @@ class HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                          child: Icon(Icons.notifications_active_outlined, size: 50,),
+                          child: Icon(Icons.notifications_active_outlined, size: 40,),
                         ),
                         Padding(padding: EdgeInsets.all(5),),
                         Text('공지사항'), // 서브메뉴 2
                       ],
                     ),
-                  ),                  GestureDetector(
-                    onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          child: Icon(Icons.chat_outlined, size: 47,),
-                        ),
-                        Padding(padding: EdgeInsets.all(5),),
-                        Text('산타의 한마디'), // 서브메뉴 3
-                      ],
-                    ),
                   ),
+
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              child: Icon(MdiIcons.bulletinBoard, size: 40,),
+                            ),
+                            Padding(padding: EdgeInsets.all(5),),
+                            Text('산타의 한마디'), // 서브메뉴 3
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
                 ],
               ),
             ),

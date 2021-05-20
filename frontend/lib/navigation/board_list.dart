@@ -25,6 +25,7 @@ class _BoardListState extends State<BoardList> {
 
   AppBar buildAppBar(BuildContext context) {
     return new AppBar(
+        backgroundColor: Colors.cyan[600],
         actions: [searchBar.getSearchAction(context)]);
   }
 
@@ -39,6 +40,7 @@ class _BoardListState extends State<BoardList> {
 
   _BoardListState() {
     searchBar = new SearchBar(
+
         inBar: false,
         buildDefaultAppBar: buildAppBar,
         setState: setState,
