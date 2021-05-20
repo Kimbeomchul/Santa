@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
 class BoardWrite extends StatefulWidget {
@@ -18,19 +20,7 @@ class _BoardWriteState extends State<BoardWrite> {
           new IconButton(
             icon: new Icon(Icons.send),
             tooltip: 'Write',
-            onPressed: () => {   // 글쓴내용 보여주는 임시 로직
-              showDialog(
-                  context:context,
-                  builder:(context) {
-                    return Column(
-                      children: [
-                        AlertDialog(content: Text(TitleController.text)),
-                        AlertDialog(content: Text(ContentController.text)),
-                      ],
-                    );
-                  }
-              ),
-            },
+            onPressed: sendBoard,
           ),
         ],
       ),
@@ -60,5 +50,21 @@ class _BoardWriteState extends State<BoardWrite> {
         ),
       ),
     );
+  }
+  void sendBoard() async{
+    final response = await http.post(
+      'http://127.0.0.1:8000/api/board/',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Token 38a6cd7b9a38596ca688a6bcacd578aec90ba31e"
+      },
+      body: jsonEncode(
+        {
+          "title": TitleController.text,
+          "content": ContentController.text,
+        }
+      ),
+    );
+    print(response.statusCode);
   }
 }
