@@ -6,13 +6,14 @@ from dj_rest_auth.registration.serializers import (SocialAccountSerializer,
                                                    SocialConnectSerializer,
                                                    SocialLoginSerializer,
                                                    VerifyEmailSerializer)
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from .serializers import UserSerializer
+from hiking.users.models import Board
+from .serializers import UserSerializer, BoardSerializer
 
 User = get_user_model()
 
@@ -31,6 +32,15 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericV
         print("미 함수 작동")
         serializer = UserSerializer(request.user, context={"request": request})
         return Response(status=status.HTTP_200_OK, data=serializer.data)
+
+
+class BoardViewSet(viewsets.ModelViewSet):
+    queryset = Board.objects.all()
+    serializer_class = BoardSerializer
+
+    # serlializer.save() 재정의
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class GoogleLogin(SocialLoginView):

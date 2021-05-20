@@ -29,3 +29,12 @@ class Profile(models.Model):
     class Meta:
         db_table = 'account_profile'
         app_label = 'account'
+
+
+class Board(models.Model):
+    """게시판 Model"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
