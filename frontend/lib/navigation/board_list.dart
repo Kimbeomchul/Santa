@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:santa_front/navigation/board_detail.dart';
 
 import 'board_write.dart';
@@ -14,28 +16,52 @@ class BoardList extends StatefulWidget {
 
 
 
-
-
-
 class _BoardListState extends State<BoardList> {
+  SearchBar searchBar;
+  String searchKey = "";
+  List<String> data = [];
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  AppBar buildAppBar(BuildContext context) {
+    return new AppBar(
+        actions: [searchBar.getSearchAction(context)]);
+  }
+
+  void onSubmitted(String value) {
+    setState(() {
+      searchKey = value;
+      _scaffoldKey.currentState.showSnackBar(
+          new SnackBar(content: new Text('$value에대한 검색결과')));
+    });
+
+  }
+
+  _BoardListState() {
+    searchBar = new SearchBar(
+        inBar: false,
+        buildDefaultAppBar: buildAppBar,
+        setState: setState,
+        onSubmitted: onSubmitted,
+        onCleared: () {
+          print("cleared");
+        },
+        onClosed: () {
+          print("closed");
+        });
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return WillPopScope(
         child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.cyan,
+          appBar: searchBar.build(context),
 
-        actions: [
-          new IconButton(
-            icon: new Icon(Icons.search,color: Colors.black54),
-            tooltip: 'Search',
-            onPressed: () => {
-
-
-            },
-          ),
-        ],
-      ),
+          key: _scaffoldKey,
       body: _buildBody(),
        floatingActionButton: FloatingActionButton(
          onPressed: (){
@@ -54,7 +80,7 @@ Widget _buildBody() {
 //  if (게시판 글 수 .length != 0) {
     return ListView.builder(
 
-      padding: const EdgeInsets.only(top: 12,left: 16, right: 16),
+      padding: const EdgeInsets.only(top: 16,left: 10, right: 10),
       itemBuilder: board_list,
       itemCount: 10,
     );
@@ -121,7 +147,7 @@ Widget board_list(BuildContext context, int index) {
                 padding: EdgeInsets.only(top: 20,bottom: 10),
                 width: 420,
                 height: 300,
-                child: Image.asset('images/santalogo.png',fit: BoxFit.cover,),
+                child: Image.asset('images/1.jpeg',fit: BoxFit.cover,),
               ),
 
            Row(

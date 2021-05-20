@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/all.dart';
@@ -227,6 +228,7 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정 
     return WillPopScope(
       child: Scaffold(
       key: scaffoldKey,
@@ -391,7 +393,7 @@ class HomePageState extends State<HomePage> {
                       :IconButton(
                          icon: Icon(Icons.gps_not_fixed),
                          onPressed: (){
-                            scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("위치정보를 받는중 에러가 발생하였습니다.")));
+                            scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("위치정보를 받아올 수 없습니다. 잠시후 다시 시도해주세요.")));
                     },
                   ),
                   //Text('show more', style: TextStyle(color: Colors.cyan),),
