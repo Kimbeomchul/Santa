@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -52,11 +53,15 @@ class _BoardWriteState extends State<BoardWrite> {
     );
   }
   void sendBoard() async{
+    SharedPreferences _prefs;
+    _prefs ??= await SharedPreferences.getInstance();
+    final token = _prefs.getString('Token') ?? 0;
+
     final response = await http.post(
       'http://127.0.0.1:8000/api/board/',
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Token 38a6cd7b9a38596ca688a6bcacd578aec90ba31e"
+        "Authorization": "Token " + token
       },
       body: jsonEncode(
         {
@@ -65,6 +70,11 @@ class _BoardWriteState extends State<BoardWrite> {
         }
       ),
     );
-    print(response.statusCode);
+    if (response.statusCode == 201){
+      Navigator.pop(context);
+    }
+    else {
+      throw Exception('글 작성 실패');
+    }
   }
 }
