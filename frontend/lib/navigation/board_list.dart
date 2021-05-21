@@ -26,7 +26,9 @@ class _BoardListState extends State<BoardList> {
   AppBar buildAppBar(BuildContext context) {
     return new AppBar(
         backgroundColor: Colors.cyan[600],
-        actions: [searchBar.getSearchAction(context)]);
+        actions: [
+          searchBar.getSearchAction(context),
+        ]);
   }
 
   void onSubmitted(String value) {

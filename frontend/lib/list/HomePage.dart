@@ -405,68 +405,63 @@ class HomePageState extends State<HomePage> {
 
             // 여기에 아이콘 리스트들 쭈르륵 나올 수 있도록
             Padding(
-              padding: EdgeInsets.only(top: 10, bottom: 20, left: 40, right: 40),
-              child: Row(
+              padding: EdgeInsets.only(top: 10, bottom: 20, left: 60, right: 45),
+              child: Container(
 
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                  children:[
-                    Padding(padding: EdgeInsets.only(left: 8)),
-                  GestureDetector(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Maps()));
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          child: Icon(MdiIcons.mapMarkerRadiusOutline, size: 40,),
-                        ),
-                        Padding(padding: EdgeInsets.all(5),),
-                        Text('지도'), // 서브메뉴 1
-                      ],
-                    ),
-                  ),
-                  ],
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          child: Icon(Icons.notifications_active_outlined, size: 40,),
-                        ),
-                        Padding(padding: EdgeInsets.all(5),),
-                        Text('공지사항'), // 서브메뉴 2
-                      ],
-                    ),
-                  ),
+                child: Row(
 
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              child: Icon(MdiIcons.bulletinBoard, size: 40,),
-                            ),
-                            Padding(padding: EdgeInsets.all(5),),
-                            Text('산타의 한마디'), // 서브메뉴 3
-                          ],
-                        ),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Maps()));
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            child: Icon(MdiIcons.mapMarkerRadiusOutline, size: 40,),
+                          ),
+                          Padding(padding: EdgeInsets.all(5),),
+                          Text('지도'), // 서브메뉴 1
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
 
-                ],
+                    Padding(padding: EdgeInsets.only(left: 66)),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(padding: EdgeInsets.only(left: 30),),
+                          Icon(Icons.notifications_active_outlined, size: 40,),
+                          Padding(padding: EdgeInsets.all(5),),
+                          Text('공지사항'), // 서브메뉴 2
+                        ],
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(left: 54)),
+
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Icon(MdiIcons.bulletinBoard, size: 40,),
+                          Padding(padding: EdgeInsets.all(5),),
+                          Text('산타의 한마디'), // 서브메뉴 3
+                        ],
+                      ),
+                    ),
+
+
+                  ],
+                ),
               ),
             ),
             Divider(),
