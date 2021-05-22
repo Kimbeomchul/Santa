@@ -25,8 +25,8 @@ class _MapsState extends State<Maps> {
     // TODO: implement initState
     super.initState();
     getLocation();
-  
-    
+
+
     _googlePos = CameraPosition(target: LatLng(36.228989,127.762536),  // 대한민국
     zoom:  7.2,
     );

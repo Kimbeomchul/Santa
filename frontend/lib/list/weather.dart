@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:santa_front/list/HomePage.dart';
+
+import '../FadeAnimation.dart';
 
 class WeatherPage extends StatefulWidget {
   final Data; // 날씨데이터
@@ -117,19 +120,19 @@ class _WeatherPageState extends State<WeatherPage> {
                     Row(
                       children: [
                         Text(
-                          '체 ',
+                          '',
                           style: TextStyle(
                               fontSize: 11,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          '${widget.Data['main']['feels_like'].toStringAsFixed(0)}°C',
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
+                        // Text(
+                        //   '${widget.Data['main']['feels_like'].toStringAsFixed(0)}°C',
+                        //   style: TextStyle(
+                        //       fontSize: 15,
+                        //       color: Colors.white,
+                        //       fontWeight: FontWeight.bold),
+                        // ),
                       ],
                     ),
                   ],
@@ -142,6 +145,7 @@ class _WeatherPageState extends State<WeatherPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+
                   Divider(color: Colors.white,thickness: 0.5,),
 
                   Container(
@@ -151,99 +155,101 @@ class _WeatherPageState extends State<WeatherPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          height: 10,
-                        ),
+
                         IntrinsicHeight(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Icon(
-                                  Icons.cloud,
-                                  color: Colors.white,
-                                ),
-                                Column(
-                                children:[
-                                  Text('시안성',style: TextStyle(color: Colors.white,fontSize: 14),),
-                                  Text('  ${widget.Data['clouds']['all']} %',style: TextStyle(color: Colors.white,fontSize: 16),),
 
-                                ],
-                                ),
-                                  VerticalDivider(
-                                  color: Colors.white,
-                                ),
-                                Icon(
-                                      Icons.cloud_circle,
-                                      color: Colors.white,
+                                Row(
+
+                                  children: [
+                                    FadeAnimation(1.6,
+                                      IconButton(
+                                        // Use the MdiIcons class for the IconData
+                                        icon: new Icon( Icons.wb_sunny,color: Colors.white,),
+                                      ),
+                                    ),
+                                    FadeAnimation(1.6,
+                                        Text("일출 ", style: TextStyle(color: Colors.white,fontSize: 14),)
+                                    ),
+                                    FadeAnimation(1.6,
+                                        Text(sun.format(DateTime.fromMillisecondsSinceEpoch(
+                                            widget.Data['sys']['sunrise'] * 1000)), style: TextStyle(color: Colors.white,fontSize: 14),)
                                     ),
 
-                                Column(
-                                  children:[
-                                    Text('풍속',style: TextStyle(color: Colors.white,fontSize: 14),),
-                                    Text('${widget.Data['wind']['speed']} m/s',style: TextStyle(color: Colors.white,fontSize: 16),),
+                                  ],
+                                ),
+
+                                Padding(padding: EdgeInsets.only(left: 25)),
+                                Row(
+
+                                  children: [
+                                    FadeAnimation(1.6,
+                                      IconButton(
+                                        // Use the MdiIcons class for the IconData
+                                        icon: new Icon( Icons.nights_stay,color: Colors.white,),
+                                      ),
+                                    ),
+                                    FadeAnimation(1.6,
+                                        Text("일몰 ", style: TextStyle(color: Colors.white,fontSize: 14),)
+                                    ),
+                                    FadeAnimation(1.6,
+                                        Text(sun.format(DateTime.fromMillisecondsSinceEpoch(
+                                            widget.Data['sys']['sunset'] * 1000)), style: TextStyle(color: Colors.white,fontSize: 14),)
+                                    ),
 
                                   ],
                                 ),
                               ],
                             )),
-
-                        SizedBox(
-                          height: 20,
-                        ),
                         IntrinsicHeight(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Icon(
-                                  Icons.grain,
-                                  color: Colors.white,
-                                ),
-                                Column(
-                                  children:[
-                                    Text('습도',style: TextStyle(color: Colors.white,fontSize: 14),),
-                                    Text('  ${widget.Data['main']['humidity']} %',style: TextStyle(color: Colors.white,fontSize: 16),),
+
+                                Row(
+
+                                  children: [
+                                    FadeAnimation(1.6,
+                                      IconButton(
+                                        // Use the MdiIcons class for the IconData
+                                        icon: new Icon( Icons.wb_sunny,color: Colors.white,),
+                                      ),
+                                    ),
+                                    FadeAnimation(1.6,
+                                        Text("습도 ", style: TextStyle(color: Colors.white,fontSize: 14),)
+                                    ),
+                                    FadeAnimation(1.6,
+                                        Text('${widget.Data['wind']['speed']} m/s', style: TextStyle(color: Colors.white,fontSize: 14),)
+                                    ),
 
                                   ],
                                 ),
-                                VerticalDivider(
-                                  color: Colors.white,
-                                ),
-                                Icon(
-                                  Icons.cloud_circle,
-                                  color: Colors.white,
-                                ),
 
-                                Column(
-                                  children:[
-                                    Text('뭘까이건',style: TextStyle(color: Colors.white,fontSize: 14),),
-                                    Text('${widget.Data['visibility']} ',style: TextStyle(color: Colors.white,fontSize: 16),),
+                                Padding(padding: EdgeInsets.only(left: 25)),
+                                Row(
+
+                                  children: [
+                                    FadeAnimation(1.6,
+                                      IconButton(
+                                        // Use the MdiIcons class for the IconData
+                                        icon: new Icon( Icons.nights_stay,color: Colors.white,),
+                                      ),
+                                    ),
+                                    FadeAnimation(1.6,
+                                        Text("일몰 ", style: TextStyle(color: Colors.white,fontSize: 14),)
+                                    ),
+                                    FadeAnimation(1.6,
+                                        Text(sun.format(DateTime.fromMillisecondsSinceEpoch(
+                                            widget.Data['sys']['sunset'] * 1000)), style: TextStyle(color: Colors.white,fontSize: 14),)
+                                    ),
 
                                   ],
                                 ),
                               ],
                             )),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        IntrinsicHeight(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                infoSpace(
-                                    Icons.wb_sunny,
-                                    '일출',
-                                    sun.format(DateTime.fromMillisecondsSinceEpoch(
-                                        widget.Data['sys']['sunrise'] * 1000))),
-                                VerticalDivider(
-                                  color: Colors.white,
-                                ),
-                                infoSpace(
-                                    Icons.nights_stay,
-                                    '일몰',
-                                    sun.format(DateTime.fromMillisecondsSinceEpoch(
-                                        widget.Data['sys']['sunset'] * 1000))),
-                              ],
-                            )),
+
                       ],
                     ),
                   ),
