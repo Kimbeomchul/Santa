@@ -183,7 +183,7 @@ class _WeatherPageState extends State<WeatherPage> {
 
                                 Padding(padding: EdgeInsets.only(left: 25)),
                                 Row(
-                                  
+
                                   children: [
                                     FadeAnimation(1.6,
                                       IconButton(
@@ -198,10 +198,58 @@ class _WeatherPageState extends State<WeatherPage> {
                                         Text(sun.format(DateTime.fromMillisecondsSinceEpoch(
                                             widget.Data['sys']['sunset'] * 1000)), style: TextStyle(color: Colors.white,fontSize: 14),)
                                     ),
+
                                   ],
                                 ),
                               ],
                             )),
+                        IntrinsicHeight(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+
+                                Row(
+
+                                  children: [
+                                    FadeAnimation(1.6,
+                                      IconButton(
+                                        // Use the MdiIcons class for the IconData
+                                        icon: new Icon( Icons.wb_sunny,color: Colors.white,),
+                                      ),
+                                    ),
+                                    FadeAnimation(1.6,
+                                        Text("습도 ", style: TextStyle(color: Colors.white,fontSize: 14),)
+                                    ),
+                                    FadeAnimation(1.6,
+                                        Text('${widget.Data['wind']['speed']} m/s', style: TextStyle(color: Colors.white,fontSize: 14),)
+                                    ),
+
+                                  ],
+                                ),
+
+                                Padding(padding: EdgeInsets.only(left: 25)),
+                                Row(
+
+                                  children: [
+                                    FadeAnimation(1.6,
+                                      IconButton(
+                                        // Use the MdiIcons class for the IconData
+                                        icon: new Icon( Icons.nights_stay,color: Colors.white,),
+                                      ),
+                                    ),
+                                    FadeAnimation(1.6,
+                                        Text("일몰 ", style: TextStyle(color: Colors.white,fontSize: 14),)
+                                    ),
+                                    FadeAnimation(1.6,
+                                        Text(sun.format(DateTime.fromMillisecondsSinceEpoch(
+                                            widget.Data['sys']['sunset'] * 1000)), style: TextStyle(color: Colors.white,fontSize: 14),)
+                                    ),
+
+                                  ],
+                                ),
+                              ],
+                            )),
+
                       ],
                     ),
                   ),

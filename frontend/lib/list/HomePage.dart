@@ -1,11 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/all.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:santa_front/list/maps.dart';
 import 'package:santa_front/list/weather.dart';
 import 'package:santa_front/mountain/mt_info.dart';
@@ -117,7 +115,7 @@ class HomePageState extends State<HomePage> {
 
   }
 
- // 로그아웃 구현
+  // 로그아웃 구현
   LogOut(){
     Navigator.of(context, rootNavigator: true).pop('dialog');  //취소
     if (LoginWith == 'Kakao') {
@@ -136,7 +134,7 @@ class HomePageState extends State<HomePage> {
   Future _KakaoUser() async {
     try {
       User user = await UserApi.instance.me(); // 유저정보
-    //  print(user.toString());
+      //  print(user.toString());
       setState(() {
         LoginWith = 'Kakao';
         _accountEmail = user.kakaoAccount.email;
@@ -189,7 +187,7 @@ class HomePageState extends State<HomePage> {
 
   Future getData()async{
     Position position = await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-   // print(position);
+    // print(position);
     lat = "lat=" + position.latitude.toString() + '&';
     lon = "lon=" + position.longitude.toString() + '&';
 
@@ -229,22 +227,21 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return WillPopScope(
       child: Scaffold(
-      key: scaffoldKey,
-      drawer : _drawer(),
+        key: scaffoldKey,
+        drawer : _drawer(),
 
-      //appBar: buildAppBar(),
-      body: _buildBody(),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: (){
-      //     Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfo())); // 글쓰기페이지로 이동
-      //   },
-      //   child: Icon(Icons.add, color: Colors.white,),
-      //   backgroundColor: Colors.black,
-      // ),
-    ),
+        //appBar: buildAppBar(),
+        body: _buildBody(),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: (){
+        //     Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfo())); // 글쓰기페이지로 이동
+        //   },
+        //   child: Icon(Icons.add, color: Colors.white,),
+        //   backgroundColor: Colors.black,
+        // ),
+      ),
     );
   }
 
@@ -267,13 +264,13 @@ class HomePageState extends State<HomePage> {
             child: Row(
               children: [
                 Text("Santa Application",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                ),
-              Spacer(),
+                Spacer(),
                 IconButton(
                     icon: Icon(Icons.share),
                     color: Colors.black,
@@ -284,56 +281,56 @@ class HomePageState extends State<HomePage> {
             ),
           ),
           Padding(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _drawerInfo(),   // Drawer Login User Info
+            padding: EdgeInsets.all(10),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _drawerInfo(),   // Drawer Login User Info
 
-                  SizedBox(
-                   height: 10,
-                  ),
+                SizedBox(
+                  height: 10,
+                ),
 
                 Divider(color:Colors.black,thickness: 0.5,),
-                  ListTile(
-                    leading:Icon(Icons.settings),
-                    title:Text("설정"),
-                    onTap: (){
-                      Navigator.pop(context);
-                    },
-                  ),
-                  Divider(color:Colors.black,thickness: 0.1),
-                  ListTile(
-                    leading:Icon(Icons.email),
-                    title:Text("만든이"),
-                    onTap :  () => Navigator.push(context, MaterialPageRoute(builder: (context) => AboutUs())),
-                  ),
-                  Divider(color:Colors.black,thickness: 0.1,),
-                  ListTile(
-                    leading:Icon(Icons.logout),
-                    title:Text("로그아웃"),
-                    onTap :  () => showDialog(
-                        context: context,
-                        builder: (_) {
-                          return AlertDialog(
-                            title: Text('로그아웃 하시겠습니까?'),
-                            actions: [
-                              FlatButton(
-                                onPressed: () => Navigator.of(context, rootNavigator: true).pop('dialog'),  //취소
-                                child: Text('취소'),
-                              ),
-                              FlatButton(
-                                onPressed: () => LogOut(), // passing true
-                                child: Text('로그아웃'),
-                              ),
-                            ],
-                          );
-                        }),
-                  ),
+                ListTile(
+                  leading:Icon(Icons.settings),
+                  title:Text("설정"),
+                  onTap: (){
+                    Navigator.pop(context);
+                  },
+                ),
+                Divider(color:Colors.black,thickness: 0.1),
+                ListTile(
+                  leading:Icon(Icons.email),
+                  title:Text("만든이"),
+                  onTap :  () => Navigator.push(context, MaterialPageRoute(builder: (context) => AboutUs())),
+                ),
+                Divider(color:Colors.black,thickness: 0.1,),
+                ListTile(
+                  leading:Icon(Icons.logout),
+                  title:Text("로그아웃"),
+                  onTap :  () => showDialog(
+                      context: context,
+                      builder: (_) {
+                        return AlertDialog(
+                          title: Text('로그아웃 하시겠습니까?'),
+                          actions: [
+                            FlatButton(
+                              onPressed: () => Navigator.of(context, rootNavigator: true).pop('dialog'),  //취소
+                              child: Text('취소'),
+                            ),
+                            FlatButton(
+                              onPressed: () => LogOut(), // passing true
+                              child: Text('로그아웃'),
+                            ),
+                          ],
+                        );
+                      }),
+                ),
 
-                ],
-              ),
+              ],
+            ),
 
           ),
         ],
@@ -342,76 +339,75 @@ class HomePageState extends State<HomePage> {
   }
   _buildBody() {
     return GestureDetector(
-        onTap: () {
-      FocusScope.of(context).unfocus();
-    },
-    child:Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            // sliver app bar
-            homeheader(),
-            //중간에 부분..
-            Container(
-              margin: EdgeInsets.only(left: 30, right: 30, top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  IconButton(icon: Icon(Icons.cloud), onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => WeatherPage(Data: weatherData)));
-                  }),
-                  FutureBuilder(
-                    future: getData(),
-                    builder: (BuildContext context, AsyncSnapshot snapshot){
-                      if(!snapshot.hasData) return CircularProgressIndicator();
-                      return Container(
-                        child: Row(
-                          children: [
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child:Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              // sliver app bar
+              homeheader(),
+              //중간에 부분..
+              Container(
+                margin: EdgeInsets.only(left: 30, right: 30, top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    IconButton(icon: Icon(Icons.cloud), onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => WeatherPage(Data: weatherData)));
+                    }),
+                    FutureBuilder(
+                      future: getData(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot){
+                        if(!snapshot.hasData) return CircularProgressIndicator();
+                        return Container(
+                          child: Row(
+                            children: [
 
-                            Text("${snapshot.data['name']}  "
-                            ),
-                            Text("${snapshot.data['main']['temp'].toStringAsFixed(0)} °C",
-                              style: TextStyle(fontSize: 20,color: Colors.black, fontWeight: FontWeight.bold),
-                            ),
+                              Text("${snapshot.data['name']}  "
+                              ),
+                              Text("${snapshot.data['main']['temp'].toStringAsFixed(0)} °C",
+                                style: TextStyle(fontSize: 20,color: Colors.black, fontWeight: FontWeight.bold),
+                              ),
 
 
 
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                  Spacer(),
-                  gps == true
-                      ? IconButton(
-                        icon: Icon(Icons.gps_fixed),
-                        onPressed: (){
-                          scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("위치정보를 정상적으로 받아오는중입니다.")));
+                            ],
+                          ),
+                        );
                       },
-                  )
-                      :IconButton(
-                         icon: Icon(Icons.gps_not_fixed),
-                         onPressed: (){
-                            scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("위치정보를 받아올 수 없습니다. 잠시후 다시 시도해주세요.")));
-                    },
-                  ),
-                  //Text('show more', style: TextStyle(color: Colors.cyan),),
-                ],
+                    ),
+                    Spacer(),
+                    gps == true
+                        ? IconButton(
+                      icon: Icon(Icons.gps_fixed),
+                      onPressed: (){
+                        scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("위치정보를 정상적으로 받아오는중입니다.")));
+                      },
+                    )
+                        :IconButton(
+                      icon: Icon(Icons.gps_not_fixed),
+                      onPressed: (){
+                        scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("위치정보를 받는중 에러가 발생하였습니다.")));
+                      },
+                    ),
+                    //Text('show more', style: TextStyle(color: Colors.cyan),),
+                  ],
+                ),
               ),
-            ),
 
 
-            // 여기에 아이콘 리스트들 쭈르륵 나올 수 있도록
-            Padding(
-              padding: EdgeInsets.only(top: 10, bottom: 20, left: 60, right: 45),
-              child: Container(
-
+              // 여기에 아이콘 리스트들 쭈르륵 나올 수 있도록
+              Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 20, left: 40, right: 40),
                 child: Row(
 
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+
                     GestureDetector(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context) => Maps()));
@@ -420,15 +416,13 @@ class HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Container(
-                            child: Icon(MdiIcons.mapMarkerRadiusOutline, size: 40,),
+                            child: Icon(Icons.map_outlined, size: 55,),
                           ),
                           Padding(padding: EdgeInsets.all(5),),
                           Text('지도'), // 서브메뉴 1
                         ],
                       ),
                     ),
-
-                    Padding(padding: EdgeInsets.only(left: 66)),
                     GestureDetector(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
@@ -436,103 +430,100 @@ class HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Padding(padding: EdgeInsets.only(left: 30),),
-                          Icon(Icons.notifications_active_outlined, size: 40,),
+                          Container(
+                            child: Icon(Icons.notifications_active_outlined, size: 50,),
+                          ),
                           Padding(padding: EdgeInsets.all(5),),
                           Text('공지사항'), // 서브메뉴 2
                         ],
                       ),
-                    ),
-                    Padding(padding: EdgeInsets.only(left: 54)),
-
-                    GestureDetector(
+                    ),                  GestureDetector(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Icon(MdiIcons.bulletinBoard, size: 40,),
+                          Container(
+                            child: Icon(Icons.chat_outlined, size: 47,),
+                          ),
                           Padding(padding: EdgeInsets.all(5),),
                           Text('산타의 한마디'), // 서브메뉴 3
                         ],
                       ),
                     ),
-
-
                   ],
                 ),
               ),
-            ),
-            Divider(),
-            //
-            // Container(
-            //   margin: EdgeInsets.only(left: 30, right: 30, top: 10 ,bottom :10),
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: <Widget>[
-            //       //color: Colors.
-            //       Text('산타의 추천', style: TextStyle(fontSize:15, fontWeight:FontWeight.w700,letterSpacing:0.22)),
-            //       Text('show more', style: TextStyle(color: Colors.cyan),),
-            //     ],
-            //   ),
+              Divider(),
+              //
+              // Container(
+              //   margin: EdgeInsets.only(left: 30, right: 30, top: 10 ,bottom :10),
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     children: <Widget>[
+              //       //color: Colors.
+              //       Text('산타의 추천', style: TextStyle(fontSize:15, fontWeight:FontWeight.w700,letterSpacing:0.22)),
+              //       Text('show more', style: TextStyle(color: Colors.cyan),),
+              //     ],
+              //   ),
 
-            Container(
-              margin: EdgeInsets.only(left: 30, right: 20, top: 0),
+              Container(
+                margin: EdgeInsets.only(left: 30, right: 20, top: 0),
 
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  //color: Colors.
-                  Text('산타의 한마디', style: TextStyle(fontSize:15, fontWeight:FontWeight.w700,letterSpacing:0.22,color: Colors.cyan)),
-                  IconButton(icon: Icon(Icons.arrow_forward_ios, color: Colors.cyan, size: 18,),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    //color: Colors.
+                    Text('산타의 한마디', style: TextStyle(fontSize:15, fontWeight:FontWeight.w700,letterSpacing:0.22,color: Colors.cyan)),
+                    IconButton(icon: Icon(Icons.arrow_forward_ios, color: Colors.cyan, size: 18,),
                       onPressed: (){
                         Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
                       },
-                  ),
+                    ),
 
-                ],
+                  ],
+                ),
+
               ),
 
-            ),
 
 
+              Padding(padding: EdgeInsets.only(top: 5)),
+              Text('오늘 하루는 저처럼 퇴사가 마려운 하루인가여?'),
+              Padding(padding: EdgeInsets.only(bottom: 10)),
+              Divider(),
+              Container(
+                margin: EdgeInsets.only(left: 30, right: 20, top: 0),
 
-            Padding(padding: EdgeInsets.only(top: 5)),
-            Text('오늘 하루는 저처럼 퇴사가 마려운 하루인가여?'),
-            Padding(padding: EdgeInsets.only(bottom: 10)),
-            Divider(),
-            Container(
-              margin: EdgeInsets.only(left: 30, right: 20, top: 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    //color: Colors.
+                    Text('HOT 게시글', style: TextStyle(fontSize:15, fontWeight:FontWeight.w700,letterSpacing:0.22,color: Colors.cyan)),
+                    IconButton(icon: Icon(Icons.arrow_forward_ios, color: Colors.cyan, size: 18,),
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
+                      },
+                    ),
 
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  //color: Colors.
-                  Text('HOT 게시글', style: TextStyle(fontSize:15, fontWeight:FontWeight.w700,letterSpacing:0.22,color: Colors.cyan)),
-                  IconButton(icon: Icon(Icons.arrow_forward_ios, color: Colors.cyan, size: 18,),
-                    onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
-                    },
-                  ),
+                  ],
+                ),
 
-                ],
               ),
 
-            ),
-
-            Padding(padding: EdgeInsets.only(top: 5)),
-            Text('나는야 퉁퉁이'),
-            Padding(padding: EdgeInsets.only(bottom: 10)),
-            Padding(padding: EdgeInsets.only(top: 5)),
-            Text('멋쟁이 토마토'),
-            Padding(padding: EdgeInsets.only(bottom: 10)),
-            Divider(),
-          ],
+              Padding(padding: EdgeInsets.only(top: 5)),
+              Text('나는야 퉁퉁이'),
+              Padding(padding: EdgeInsets.only(bottom: 10)),
+              Padding(padding: EdgeInsets.only(top: 5)),
+              Text('멋쟁이 토마토'),
+              Padding(padding: EdgeInsets.only(bottom: 10)),
+              Divider(),
+            ],
+          ),
         ),
-      ),
 
-    ),
+      ),
     );
   }
 
@@ -591,7 +582,7 @@ class HomePageState extends State<HomePage> {
           ),
         ),
 
-       // Drawer 부분!!!
+        // Drawer 부분!!!
         RefreshIndicator(
           onRefresh: _onRefresh,
           child: SingleChildScrollView(
@@ -603,7 +594,7 @@ class HomePageState extends State<HomePage> {
                   IconButton(icon: Icon(Icons.menu),
                       onPressed: (){
                         scaffoldKey.currentState.openDrawer();
-                  }),
+                      }),
 
                 ],
               ),
