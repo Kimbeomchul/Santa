@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:santa_front/list/HomePage.dart';
 import 'package:santa_front/mountain/mt_detail.dart';
@@ -161,10 +162,9 @@ class _MountainInfoState extends State<MountainInfo> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.cyan,
-        title: Text('${widget.mt_word} 검색 결과'),),
+      appBar: AppBar(title: Text('${widget.mt_word} 검색 결과'),),
       body: _buildBody(),
 //      endDrawer: DrawerPage(),
       //resizeToAvoidBottomInset: false,

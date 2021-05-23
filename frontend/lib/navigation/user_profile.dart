@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:santa_front/users/login.dart';
@@ -166,41 +167,9 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
- profileList(){
-    return Container(
-      height: 450,
-      width: 500,
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemBuilder: lists,
-        itemCount: 10,
-      ),
-    );
- }
-
-  Widget lists(BuildContext context, int index) {
-    return Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(padding: EdgeInsets.only(top:10,)),
-            Text('산에 가고싶은 날이네요..',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15.5),),
-            Text('오늘 날씨가 좋아서 산에가고싶었지만 못갔슴다. 커피마시고파여 '),
-            Row(
-              children: [
-                Text('5분 전',style: TextStyle(fontSize: 11),),
-              ],
-            ),
-            Divider(),
-          ],
-        ),
-    );
-  }
   @override
   Widget build(BuildContext context) {
-
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
 
     return WillPopScope(
         child: Scaffold(
@@ -300,15 +269,32 @@ class _UserProfileState extends State<UserProfile> {
                 SizedBox(
                   height: 10,
                 ),
-                Padding(padding: EdgeInsets.only(left: 10,top: 10,bottom: 5),
+                Padding(padding: EdgeInsets.only(left: 10,top: 10,bottom: 10),
                   child: _userText(), // 유저 아이디 , 이메일
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 350,
+                      child:  OutlinedButton(
+                        onPressed: () {},
+                        child: Text('내정보 수정',
+                            style: TextStyle(
+                                color: Colors.black, fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+
+                  ],
                 ),
                 Divider(color:Colors.black,thickness: 1,),
 
                 // 디바이더 이후
                 // 에타형식
 
-                profileList(),
+               // profileList(), // 내글
 
               ],
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:santa_front/navigation/chat.dart';
 
@@ -17,6 +18,7 @@ class _NavigationRouterState extends State<NavigationRouter> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return WillPopScope(
        child: Scaffold(
       bottomNavigationBar: BottomNavigationBar(

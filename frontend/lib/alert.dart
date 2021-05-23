@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:santa_front/navigation_route.dart';
 
 class AlertPage extends StatefulWidget {
@@ -9,6 +10,7 @@ class AlertPage extends StatefulWidget {
 class _AlertPageState extends State<AlertPage> {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return Scaffold(
       body: AlertDialog(
         title: new Text("Santa"),
