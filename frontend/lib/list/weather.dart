@@ -52,7 +52,7 @@ class _WeatherPageState extends State<WeatherPage> {
                         color: Colors.black54,
                       ),
                       onPressed: (){
-                    Navigator.pop(context);
+                    (context);
                   }),
                 ),
               ],

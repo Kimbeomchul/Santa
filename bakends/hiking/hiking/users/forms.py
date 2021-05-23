@@ -14,7 +14,7 @@ class SignupForm(forms.Form):
                             max_length=30,
                             widget=forms.TextInput(
                                 attrs={'placeholder':
-                                           _('Phone number'), }))
+                                       _('Phone number'), }))
 
     def signup(self, request, user):
         user.name = self.cleaned_data['name']
