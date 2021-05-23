@@ -20,8 +20,8 @@ User = get_user_model()
 
 
 class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericViewSet):
-    serializer_class = UserSerializer
     queryset = User.objects.all()
+    serializer_class = UserSerializer
     lookup_field = "username"
 
     def get_queryset(self, *args, **kwargs):

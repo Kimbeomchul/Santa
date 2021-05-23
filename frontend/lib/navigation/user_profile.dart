@@ -16,65 +16,58 @@ class UserProfile extends StatefulWidget {
 
 
 class _UserProfileState extends State<UserProfile> {
-  String accountEmail = 'None';
-  String ageRange = 'None';
-  String gender = 'None';
-  String profile = 'None';
-  String userId = 'None';
-  String nickname = 'None';
-  String LoginWith = '';
+  String provider = 'None';
+  String name = 'None';
+  String photo = 'None';
+  String email = 'None';
 
-  var googleEmail;
-  var googleId;
-  var googleImg;
-  var googleNickname;
   SharedPreferences _prefs;
-  Future<bool> googleUser() async {
+  Future<bool> user() async {
     _prefs ??= await SharedPreferences.getInstance();
     setState(() {
-      LoginWith = (_prefs.getString('LoginWith') ?? 'Kakao');
-      googleNickname = (_prefs.getString('googleNickname') ?? '');
-      googleImg = (_prefs.getString('googleImg') ?? '');
-      googleEmail = (_prefs.getString('googleEmail') ?? '');
-      googleId = (_prefs.getString('googleId') ?? '');
+      provider = (_prefs.getString('Provider') ?? '');
+      name = (_prefs.getString('Name') ?? '');
+      photo = (_prefs.getString('Photo') ?? '');
+      email = (_prefs.getString('Email') ?? '');
     });
     // print(googleNickname);
     // print(googleImg);
     // print(googleEmail);
     // print(googleId);
-    if (LoginWith == 'Kakao'){
-      KakaoUser();
-    }
+    // if (provider == 'Kakao'){
+    //   KakaoUser();
+    // }
   }
 //카카오 유저 정보 가져오기
-  Future KakaoUser() async {
-    try {
-      User user = await UserApi.instance.me(); // 유저정보
-   //   print(user.toString());
-      setState(() {
-        LoginWith = 'Kakao';
-        accountEmail = user.kakaoAccount.email;
-        ageRange = user.kakaoAccount.ageRange.toString();
-        gender = user.kakaoAccount.gender.toString();
-        nickname =user.kakaoAccount.profile.nickname;
-        profile = user.kakaoAccount.profile.profileImageUrl.toString();
-      });
-
-    } catch (e) {
-      print("Google & Kakao Login Error ");
-    }
-  }
+//   Future KakaoUser() async {
+//     try {
+//       User user = await UserApi.instance.me(); // 유저정보
+//    //   print(user.toString());
+//       setState(() {
+//         provider = 'Kakao';
+//         accountEmail = user.kakaoAccount.email;
+//         ageRange = user.kakaoAccount.ageRange.toString();
+//         gender = user.kakaoAccount.gender.toString();
+//         nickname =user.kakaoAccount.profile.nickname;
+//         profile = user.kakaoAccount.profile.profileImageUrl.toString();
+//       });
+//
+//     } catch (e) {
+//       print("Google & Kakao Login Error ");
+//     }
+//   }
 
   @override
   void initState(){
     super.initState();
-    googleUser();  //
+    user();  //
   }
  LogOut(){
    Navigator.of(context, rootNavigator: true).pop('dialog');  //취소
-   if (LoginWith == 'Kakao') {
+   if (provider == 'kakao') {
      LogOutUser(); // 카카오 로그아웃
-   }else if(LoginWith == 'Google'){
+     _prefs.clear(); // SharedPrefer 키값 전부 삭 제 !
+   }else if(provider == 'google'){
      final GoogleSignIn _googleSignIn = new GoogleSignIn();
      _googleSignIn.signOut();
      _prefs.clear(); // SharedPrefer 키값 전부 삭 제 !
@@ -114,15 +107,9 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
   Widget _userText(){
-    var _curId = '';
-    var _curEmail ='';
-    if (LoginWith == 'Kakao') {
-      _curId = nickname;
-      _curEmail = accountEmail;
-    }else if (LoginWith == 'Google'){
-      _curId = googleNickname;
-      _curEmail = googleEmail;
-    }
+    String _curId = name;
+    String _curEmail = email;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,35 +124,32 @@ class _UserProfileState extends State<UserProfile> {
   }
 // 유저 프로필 사진
    Widget _userImg() {
-    var _curImg ='https://blog.kakaocdn.net/dn/cyOIpg/btqx7JTDRTq/1fs7MnKMK7nSbrM9QTIbE1/img.jpg';
-    if (LoginWith == 'Kakao') {
-      _curImg = profile;
-    }else if (LoginWith == 'Google'){
-      _curImg = googleImg;
-    }
+     String _curImg = photo;
+      if(_curImg == "None"){
+        return CircularProgressIndicator();
+      }
+      return Container(
+        width: 100,
+        height: 100,
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey[500],
+              offset: Offset(4.0, 4.0),
+              blurRadius: 15.0,
+              spreadRadius: 1.0,
+            ),
+          ],
+          shape: BoxShape.circle,
 
-    return Container(
-      width: 100,
-      height: 100,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey[500],
-            offset: Offset(4.0, 4.0),
-            blurRadius: 15.0,
-            spreadRadius: 1.0,
+          image: DecorationImage(
+              image: NetworkImage(_curImg),
+              fit: BoxFit.cover
           ),
-        ],
-        shape: BoxShape.circle,
 
-        image: DecorationImage(
-            image: NetworkImage(_curImg),
-            fit: BoxFit.cover
         ),
-
-      ),
-    );
-  }
+      );
+   }
 
   @override
   Widget build(BuildContext context) {

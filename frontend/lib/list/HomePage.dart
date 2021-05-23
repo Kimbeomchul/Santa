@@ -30,54 +30,36 @@ class HomePageState extends State<HomePage> {
 
 
 
-  String url = 'http://api.openweathermap.org/data/2.5/weather?';
+  String weatherUrl = 'http://api.openweathermap.org/data/2.5/weather?';
   String lat = '';
   String lon = '';
   String appId = 'appid=8cdd068d54bf1713cb88cb026decbf95&';
   String units = 'units=metric';
 
+  String provider = 'None';
+  String name = 'None';
+  String photo = 'None';
+  String email = 'None';
 
-
-  String _accountEmail = 'None';
-  String _ageRange = 'None';
-  String _gender = 'None';
-  String _profile = 'None';
-  String _userId = 'None';
-  String _nickname = 'None';
-  String LoginWith = '';
-
-  var googleEmail;
-  var googleId;
-  var googleImg;
-  var googleNickname;
   SharedPreferences _prefs;
-  Future<bool> googleUser() async {
+
+  Future<bool> user() async {
     _prefs ??= await SharedPreferences.getInstance();
-    googleNickname = (_prefs.getString('googleNickname') ?? '');
-    googleImg = (_prefs.getString('googleImg') ?? '');
-    googleEmail = (_prefs.getString('googleEmail') ?? '');
-    googleId = (_prefs.getString('googleId') ?? '');
-    LoginWith = (_prefs.getString('LoginWith') ?? 'Kakao');
-    // print(googleNickname);
-    // print(googleImg);
-    // print(googleEmail);
-    // print(googleId);
+    provider = (_prefs.getString('Provider') ?? '');
+    name = (_prefs.getString('Name') ?? '');
+    photo = (_prefs.getString('Photo') ?? '');
+    email = (_prefs.getString('Email') ?? '');
   }
 
   _drawerInfo(){
-    var _currentImg = '';
-    var _currentId = '';
-    var _currentEmail = 'https://blog.kakaocdn.net/dn/cyOIpg/btqx7JTDRTq/1fs7MnKMK7nSbrM9QTIbE1/img.jpg' ;
+    var _currentImg = photo;
+    var _currentId = name;
+    var _currentEmail = email;
 
-    if(LoginWith == "Google"){
-      _currentImg = googleImg;
-      _currentEmail = googleEmail;
-      _currentId = googleNickname;
-    }else if (LoginWith == "Kakao"){
-      _currentImg = _profile;
-      _currentEmail = _accountEmail;
-      _currentId = _nickname;
+    if(_currentImg == "None"){
+      return CircularProgressIndicator();
     }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,9 +100,9 @@ class HomePageState extends State<HomePage> {
   // 로그아웃 구현
   LogOut(){
     Navigator.of(context, rootNavigator: true).pop('dialog');  //취소
-    if (LoginWith == 'Kakao') {
+    if (provider == 'kakao') {
       LogOutUser(); // 카카오 로그아웃
-    }else if(LoginWith == 'Google'){
+    }else if(provider == 'google'){
       final GoogleSignIn _googleSignIn = new GoogleSignIn();
       _googleSignIn.signOut();
       _prefs.clear(); // SharedPrefer 키값 전부 삭 제 !
@@ -131,25 +113,25 @@ class HomePageState extends State<HomePage> {
   }
 
 //카카오 유저 정보 가져오기
-  Future _KakaoUser() async {
-    try {
-      User user = await UserApi.instance.me(); // 유저정보
-      //  print(user.toString());
-      setState(() {
-        LoginWith = 'Kakao';
-        _accountEmail = user.kakaoAccount.email;
-        _ageRange = user.kakaoAccount.ageRange.toString();
-        _gender = user.kakaoAccount.gender.toString();
-        _nickname =user.kakaoAccount.profile.nickname;
-        _profile = user.kakaoAccount.profile.profileImageUrl.toString();
-        _userId = user.id.toString(); //유저아이디
-
-      });
-
-    } catch (e) {
-      print("Error With KakaoUserInfo");
-    }
-  }
+//   Future _KakaoUser() async {
+//     try {
+//       User user = await UserApi.instance.me(); // 유저정보
+//       //  print(user.toString());
+//       setState(() {
+//         provider = 'Kakao';
+//         _accountEmail = user.kakaoAccount.email;
+//         _ageRange = user.kakaoAccount.ageRange.toString();
+//         _gender = user.kakaoAccount.gender.toString();
+//         _nickname =user.kakaoAccount.profile.nickname;
+//         _profile = user.kakaoAccount.profile.profileImageUrl.toString();
+//         _userId = user.id.toString(); //유저아이디
+//
+//       });
+//
+//     } catch (e) {
+//       print("Error With KakaoUserInfo");
+//     }
+//   }
 
   void permission()async{ // 위치권환 획득 < 날씨 >
     await requestPermission();
@@ -166,7 +148,7 @@ class HomePageState extends State<HomePage> {
   }
 
   LogOutUser() async {   // 로그아웃 로직
-    if(_nickname != 'None'){
+    if(name != 'None'){
       try {
         var code = await UserApi.instance.logout();
         print(code.toString());
@@ -192,7 +174,7 @@ class HomePageState extends State<HomePage> {
     lon = "lon=" + position.longitude.toString() + '&';
 
     http.Response response = await http.get(
-      Uri.encodeFull(url+lat+lon+appId+units),
+      Uri.encodeFull(weatherUrl+lat+lon+appId+units),
       headers:  {"Accept" : "application/json"},
 
     );
@@ -213,8 +195,7 @@ class HomePageState extends State<HomePage> {
     // TODO: implement initState
     super.initState();
     permission(); // 날씨권
-    _KakaoUser(); // 카카오 로그인
-    googleUser(); // 구글로그인
+    user(); // 구글로그인
     myFocusNode = FocusNode();
   }
 
