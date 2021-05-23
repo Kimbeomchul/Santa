@@ -14,6 +14,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from hiking.users.models import Board
 from .serializers import UserSerializer, BoardSerializer
+from .pagination import PageNumberPagination
 
 User = get_user_model()
 
@@ -35,8 +36,9 @@ class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericV
 
 
 class BoardViewSet(viewsets.ModelViewSet):
-    queryset = Board.objects.all()
+    queryset = Board.objects.all().order_by('-id')
     serializer_class = BoardSerializer
+    pagination_class = PageNumberPagination
 
     # serlializer.save() 재정의
     def perform_create(self, serializer):
