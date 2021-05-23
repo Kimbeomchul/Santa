@@ -110,7 +110,6 @@ class _LoginPageState extends State<LoginPage> {
           );
           if(responseUser.statusCode == 200){
             var userData = jsonDecode(utf8.decode(responseUser.bodyBytes))[0];
-            print(userData);
             await _prefs.setString('Username', userData['username']);
             await _prefs.setString('Name', userData['name']);
             await _prefs.setString('Email', userData['email']);
