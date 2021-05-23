@@ -197,9 +197,9 @@ class HomePageState extends State<HomePage> {
 
     );
     //print(url+lat+lon+appId+units);
-    // print("ResponseBody : ${response.body}");
+    //print("ResponseBody : ${response.body}");
     weatherData = jsonDecode(response.body);
-
+    print(weatherData);
     // if(weatherData['main']['temp']< 15){
     //   print('추웡');
     // }else{
