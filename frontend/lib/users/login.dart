@@ -81,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
         print(auth.idToken);
         print(auth.accessToken);
 
+<<<<<<< Updated upstream
         // final response = await http.post(
         //   'http://127.0.0.1:8000/dj-rest-auth/google/',
         //   headers: {
@@ -103,6 +104,47 @@ class _LoginPageState extends State<LoginPage> {
         // else{
         //   throw Exception('구글 로그인 실패');
         // }
+=======
+        final response = await http.post(
+          'http://127.0.0.1:8000/dj-rest-auth/google/',
+          headers: {
+            "Content-Type": "application/json",
+            'Accept': 'application/json',
+          },
+          body: jsonEncode(
+            {
+              "access_token": auth.accessToken,
+              "code": '',
+              "id_token": auth.idToken,
+            }
+          ),
+        );
+        if (response.statusCode == 200){
+          print(response);
+          print(jsonDecode(response.body)['key']);
+          await _prefs.setString('Token', jsonDecode(response.body)['key']);
+          final token = _prefs.getString('Token') ?? 0;
+          final responseUser = await http.get(
+            'http://127.0.0.1:8000/api/users/',
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Token " + token
+            }
+          );
+          if(responseUser.statusCode == 200){
+            var userData = jsonDecode(utf8.decode(responseUser.bodyBytes))[0];
+            print(userData);
+            await _prefs.setString('Username', userData['username']);
+            await _prefs.setString('Name', userData['name']);
+            await _prefs.setString('Email', userData['email']);
+            await _prefs.setString('Provider', userData['provider']);
+            await _prefs.setString('Photo', userData['photo']);
+          }
+        }
+        else{
+          throw Exception('구글 로그인 실패');
+        }
+>>>>>>> Stashed changes
 
       });
 
