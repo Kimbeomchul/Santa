@@ -39,6 +39,7 @@ dependencies:
   material_design_icons_flutter: 4.0.5955
   url_launcher:
   flutter_search_bar: ^2.1.0
+  provider: ^4.3.3
 
 dev_dependencies:
   flutter_test:

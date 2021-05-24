@@ -6,6 +6,7 @@ import 'package:santa_front/navigation/chat.dart';
 import 'navigation/board_list.dart';
 import 'list/HomePage.dart';
 import 'navigation/user_profile.dart';
+import 'navigation/board_list_test.dart';
 
 class NavigationRouter extends StatefulWidget {
   @override
@@ -62,7 +63,7 @@ class _NavigationRouterState extends State<NavigationRouter> {
 
   List _widgetOptions = [
     HomePage(), // 인덱스 0
-    BoardList(), // 인덱스 1
+    ProviderInfiniteScrollScreen(), // 인덱스 1
     UserChat(), // 인덱스 2
     UserProfile(), // 인덱스 3
 
