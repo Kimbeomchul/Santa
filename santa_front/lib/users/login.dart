@@ -4,6 +4,7 @@ import 'package:kakao_flutter_sdk/all.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import '../navigation_route.dart';
 
@@ -81,30 +82,6 @@ class _LoginPageState extends State<LoginPage> {
         print(auth.idToken);
         print(auth.accessToken);
 
-<<<<<<< Updated upstream
-        // final response = await http.post(
-        //   'http://127.0.0.1:8000/dj-rest-auth/google/',
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //     'Accept': 'application/json',
-        //   },
-        //   body: jsonEncode(
-        //     {
-        //       "access_token": auth.accessToken,
-        //       "code": '',
-        //       "id_token": auth.idToken,
-        //     }
-        //   ),
-        // );
-        // if (response.statusCode == 200){
-        //   print(response);
-        //   print(jsonDecode(response.body)['key']);
-        //
-        // }
-        // else{
-        //   throw Exception('구글 로그인 실패');
-        // }
-=======
         final response = await http.post(
           'http://127.0.0.1:8000/dj-rest-auth/google/',
           headers: {
@@ -144,7 +121,6 @@ class _LoginPageState extends State<LoginPage> {
         else{
           throw Exception('구글 로그인 실패');
         }
->>>>>>> Stashed changes
 
       });
 
