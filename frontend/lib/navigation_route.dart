@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kakao_flutter_sdk/all.dart';
 import 'package:santa_front/navigation/chat.dart';
+import 'package:santa_front/ui/board_list_widget.dart';
 
 import 'navigation/board_list.dart';
 import 'list/HomePage.dart';
@@ -63,7 +64,7 @@ class _NavigationRouterState extends State<NavigationRouter> {
 
   List _widgetOptions = [
     HomePage(), // 인덱스 0
-    ProviderInfiniteScrollScreen(), // 인덱스 1
+    BoardListWidget(), // 인덱스 1
     UserChat(), // 인덱스 2
     UserProfile(), // 인덱스 3
 

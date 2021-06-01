@@ -18,7 +18,7 @@ class AjaxProvider extends ChangeNotifier{
       return [];
     }
 
-    return List.generate(20, (index) => nextId + index);
+    return List.generate(10, (index) => nextId + index);
   }
 
   fetchItems({

@@ -3,18 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:santa_front/users/login.dart';
 import 'package:provider/provider.dart';
 import 'provider/AjaxProvider.dart';
+import 'provider/board_provider.dart';
 import 'navigation_route.dart';
 
+
 void main() {
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AjaxProvider(),
-        ),
-      ],
-      child: MyApp(),
-    )
-  );
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -30,7 +24,15 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.white,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: KakaoLogin(),
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (BuildContext context) => AjaxProvider()),
+          ChangeNotifierProvider(
+              create: (BuildContext context) => BoardProvider()),
+        ],
+        child: KakaoLogin(),
+      ),
     );
   }
 }
