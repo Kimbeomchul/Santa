@@ -25,6 +25,7 @@ class BoardRepository{
       Map<String, dynamic> body = json.decode(response.body);
       if(body['results'] != null){
         List<dynamic> list = body['results'];
+
         return list.map<Board>((item) => Board.fromJson(item)).toList();
       }
     }

@@ -153,7 +153,7 @@ class _BoardListState extends State<BoardList> {
 //     return ListView.builder(
 //       padding: const EdgeInsets.only(top: 16, left: 10, right: 10),
 //       itemBuilder: board_list,
-//       itemCount: 10,
+//       itemCount 10,
 //
 //     );
 
