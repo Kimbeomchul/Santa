@@ -4,10 +4,7 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
-
-from dj_rest_auth.registration.views import SocialAccountListView
 from rest_framework.authtoken.views import obtain_auth_token
-
 from users.api import views
 
 urlpatterns = [
@@ -20,12 +17,14 @@ urlpatterns = [
     # User management
     path("users/", include("hiking.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
+    path("accounts/", include("rest_auth.urls")),
+    path("accounts/", include("dj_rest_auth.urls")),
     # dj-rest-auth,
-    path("dj-rest-auth/", include("dj_rest_auth.urls")),
-    path("dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")),
-    path("socialaccounts/", SocialAccountListView.as_view(), name='social_account_list'),
     path("dj-rest-auth/google/", views.GoogleLogin.as_view(), name='google_login'),
     path("dj-rest-auth/kakao/", views.KaKaoLogin.as_view(), name='kakao_login'),
+    # rest auth,
+    path("rest-auth/google/", views.GoogleLogin.as_view(), name='google_login'),
+    path("rest-auth/kakao/", views.KaKaoLogin.as_view(), name='kakao_login'),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
