@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:santa_front/provider/board_provider.dart';
 import 'package:santa_front/model/board.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:santa_front/navigation/setting_menu.dart';
 import 'package:santa_front/navigation/board_detail.dart';
 import 'package:santa_front/navigation/board_write.dart';
+import 'package:santa_front/repository/board_repository.dart';
+import 'package:santa_front/ui/board_list_item_widget.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
-
 
 class BoardListWidget extends StatefulWidget {
   BoardListWidget({Key key}) : super(key: key);
@@ -25,19 +24,60 @@ class _BoardListWidgetState extends State<BoardListWidget> {
 
   BoardProvider _boardProvider;
 
+  var _pageSize = 10;
+  final PagingController<int, Board> _pagingController =
+      PagingController(firstPageKey: 0);
+
+  @override
+  void initState() {
+    _pagingController.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
+    super.initState();
+  }
+
+  _fetchPage(int pageKey) async {
+    try {
+      _boardProvider = Provider.of<BoardProvider>(context, listen: false);
+
+      List<Board> boardList = _boardProvider.boardList;
+      _boardProvider.getBoardList(pageKey, _pageSize);
+
+      final isLastPage = boardList.length < _pageSize;
+      if (isLastPage) {
+        _pagingController.appendLastPage(boardList);
+      } else {
+        final nextPageKey = pageKey + boardList.length;
+        _pagingController.appendPage(boardList, nextPageKey);
+      }
+    } catch (error) {
+      print(error);
+      _pagingController.error = error;
+    }
+  }
+
   Widget _makeListView(List<Board> boardList) {
     // LsitView -> PagedListView
-    return ListView.separated(
-      itemCount: boardList.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Center(
-          child: Text(boardList[index].title),
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return Divider();
-      },
+    return PagedListView<int, Board>(
+      pagingController: _pagingController,
+      builderDelegate: PagedChildBuilderDelegate<Board>(
+        itemBuilder: (context, item, index) => BoardListItem(
+          boardList: item,
+        ),
+      ),
     );
+    //   return ListView.separated(
+    //     itemCount: boardList.length,
+    //     itemBuilder: (BuildContext context, int index) {
+    //       return Center(
+    //         child: Text(boardList[index].title),
+    //       );
+    //     },
+    //     separatorBuilder: (BuildContext context, int index) {
+    //       return Divider();
+    //     },
+    //   );
+    // }
   }
 
   Widget boardCard(BuildContext context, int index) {
@@ -71,7 +111,7 @@ class _BoardListWidgetState extends State<BoardListWidget> {
     );
   }
 
-  Widget imageRoute(int index, List<Board> boardList ) {
+  Widget imageRoute(int index, List<Board> boardList) {
     var imgUrl = "0";
 
     if (imgUrl != "1") {
@@ -314,37 +354,62 @@ class _BoardListWidgetState extends State<BoardListWidget> {
         [DeviceOrientation.portraitUp]); // 방향전환 세로고정
 
     _boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    _boardProvider.loadBoardList();
+    // _boardProvider.loadBoardList();
 
-    return WillPopScope(
-      child: Scaffold(
-          appBar: searchBar.build(context),
-          key: _scaffoldKey,
-          body: Consumer<BoardProvider>(
-            builder: (context, provider, widget) {
-              return _buildBody(provider.boardList);
-            },
+    return RefreshIndicator(
+      onRefresh: () => Future.sync(
+        () => _pagingController.refresh(),
+      ),
+      child: PagedListView<int, Board>.separated(
+        pagingController: _pagingController,
+        builderDelegate: PagedChildBuilderDelegate<Board>(
+          itemBuilder: (context, item, index) => BoardListItem(
+            boardList: item,
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(
-                  builder: (context) => BoardWrite())); // 글쓰기페이지로 이동
-            },
-            child: Icon(Icons.add, color: Colors.white,),
-            backgroundColor: Colors.black,
-          ),
-          // body: Consumer<BoardProvider>(
-          //   builder: (context, provider, widget) {
-          //     print(provider.boardList);
-          //     if (provider.boardList != null && provider.boardList.length > 0) {
-          //       return _makeListView(provider.boardList);
-          //     }
-          //     return Center(
-          //       child: CircularProgressIndicator(),
-          //     );
-          //   },
-          // )
-          ),
+        ),
+        separatorBuilder: (context, index) => const Divider(),
+      ),
+      // child: WillPopScope(
+      //   child: Scaffold(
+      //     appBar: searchBar.build(context),
+      //     key: _scaffoldKey,
+      //     body: Consumer<BoardProvider>(
+      //       builder: (context, provider, widget) {
+      //         return _buildBody(provider.boardList);
+      //       },
+      //     ),
+      //     floatingActionButton: FloatingActionButton(
+      //       onPressed: () {
+      //         Navigator.push(
+      //             context,
+      //             MaterialPageRoute(
+      //                 builder: (context) => BoardWrite())); // 글쓰기페이지로 이동
+      //       },
+      //       child: Icon(
+      //         Icons.add,
+      //         color: Colors.white,
+      //       ),
+      //       backgroundColor: Colors.black,
+      //     ),
+      //     // body: Consumer<BoardProvider>(
+      //     //   builder: (context, provider, widget) {
+      //     //     print(provider.boardList);
+      //     //     if (provider.boardList != null && provider.boardList.length > 0) {
+      //     //       return _makeListView(provider.boardList);
+      //     //     }
+      //     //     return Center(
+      //     //       child: CircularProgressIndicator(),
+      //     //     );
+      //     //   },
+      //     // )
+      //   ),
+      // ),
     );
+
+    @override
+    void dispose() {
+      _pagingController.dispose();
+      super.dispose();
+    }
   }
 }

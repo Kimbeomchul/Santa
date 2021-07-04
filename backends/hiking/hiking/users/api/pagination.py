@@ -1,7 +1,7 @@
-from rest_framework.pagination import CursorPagination
+from rest_framework.pagination import LimitOffsetPagination
 
 
-class PageNumberPagination(CursorPagination):
+class PageNumberPagination(LimitOffsetPagination):
     page_size = 10
     cursor_query_param = 'id'
     ordering = '-id'
