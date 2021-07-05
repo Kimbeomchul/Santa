@@ -18,7 +18,6 @@ class BoardProvider extends ChangeNotifier {
     List<Board> boardList = await _boardRepository.getBoardList(offset, limit);
     _board = boardList;
     notifyListeners();
-    print(_board.length);
   }
   // repository
 }
