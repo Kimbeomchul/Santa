@@ -8,7 +8,6 @@ import 'package:santa_front/navigation/setting_menu.dart';
 import 'package:santa_front/navigation/board_detail.dart';
 import 'package:santa_front/navigation/board_write.dart';
 import 'package:santa_front/repository/board_repository.dart';
-import 'package:santa_front/ui/board_list_item_widget.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class BoardListWidget extends StatefulWidget {
@@ -30,18 +29,18 @@ class _BoardListWidgetState extends State<BoardListWidget> {
 
   @override
   void initState() {
+    print("initState() 실행 체크 ");
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
     super.initState();
   }
 
-  _fetchPage(int pageKey) async {
+  Future<void> _fetchPage(int pageKey) async {
     try {
       _boardProvider = Provider.of<BoardProvider>(context, listen: false);
-
+      await _boardProvider.getBoardList(pageKey, _pageSize);
       List<Board> boardList = _boardProvider.boardList;
-      _boardProvider.getBoardList(pageKey, _pageSize);
 
       final isLastPage = boardList.length < _pageSize;
       if (isLastPage) {
@@ -56,29 +55,29 @@ class _BoardListWidgetState extends State<BoardListWidget> {
     }
   }
 
-  Widget _makeListView(List<Board> boardList) {
-    // LsitView -> PagedListView
-    return PagedListView<int, Board>(
-      pagingController: _pagingController,
-      builderDelegate: PagedChildBuilderDelegate<Board>(
-        itemBuilder: (context, item, index) => BoardListItem(
-          boardList: item,
-        ),
-      ),
-    );
-    //   return ListView.separated(
-    //     itemCount: boardList.length,
-    //     itemBuilder: (BuildContext context, int index) {
-    //       return Center(
-    //         child: Text(boardList[index].title),
-    //       );
-    //     },
-    //     separatorBuilder: (BuildContext context, int index) {
-    //       return Divider();
-    //     },
-    //   );
-    // }
-  }
+  // Widget _makeListView(List<Board> boardList) {
+  //   // LsitView -> PagedListView
+  //   return PagedListView<int, Board>(
+  //     pagingController: _pagingController,
+  //     builderDelegate: PagedChildBuilderDelegate<Board>(
+  //       itemBuilder: (context, item, index) => BoardListItem(
+  //         boardList: item,
+  //       ),
+  //     ),
+  //   );
+  //   return ListView.separated(
+  //     itemCount: boardList.length,
+  //     itemBuilder: (BuildContext context, int index) {
+  //       return Center(
+  //         child: Text(boardList[index].title),
+  //       );
+  //     },
+  //     separatorBuilder: (BuildContext context, int index) {
+  //       return Divider();
+  //     },
+  //   );
+  // }
+  // }
 
   Widget boardCard(BuildContext context, int index) {
     if (index < 10) {
@@ -104,10 +103,18 @@ class _BoardListWidgetState extends State<BoardListWidget> {
   }
 
   Widget _buildBody(List<Board> boardList) {
-    return ListView.builder(
-      padding: const EdgeInsets.only(top: 16, left: 10, right: 10),
-      itemBuilder: boardCard,
-      itemCount: boardList.length,
+    return PagedListView<int, Board>.separated(
+      pagingController: _pagingController,
+      builderDelegate:
+          PagedChildBuilderDelegate<Board>(itemBuilder: (context, item, index) {
+        return ListTile(
+          leading: CircleAvatar(
+            radius: 20,
+          ),
+          title: Text(item.title),
+        );
+      }),
+      separatorBuilder: (context, index) => const Divider(),
     );
   }
 
@@ -352,23 +359,50 @@ class _BoardListWidgetState extends State<BoardListWidget> {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp]); // 방향전환 세로고정
-
-    _boardProvider = Provider.of<BoardProvider>(context, listen: false);
+    return WillPopScope(
+      child: Scaffold(
+          appBar: searchBar.build(context),
+          key: _scaffoldKey,
+          body: Consumer<BoardProvider>(builder: (context, provider, widget) {
+            return _buildBody(provider.boardList);
+          }),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BoardWrite())); // 글쓰기페이지로 이동
+            },
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            backgroundColor: Colors.black,
+          )),
+      onWillPop: () {
+        return;
+       },
+    );
+    // _boardProvider = Provider.of<BoardProvider>(context, listen: false);
     // _boardProvider.loadBoardList();
 
-    return RefreshIndicator(
-      onRefresh: () => Future.sync(
-        () => _pagingController.refresh(),
-      ),
-      child: PagedListView<int, Board>.separated(
-        pagingController: _pagingController,
-        builderDelegate: PagedChildBuilderDelegate<Board>(
-          itemBuilder: (context, item, index) => BoardListItem(
-            boardList: item,
-          ),
-        ),
-        separatorBuilder: (context, index) => const Divider(),
-      ),
+    // return RefreshIndicator(
+    //   onRefresh: () => Future.sync(
+    //     () => _pagingController.refresh(),
+    //   ),
+    //   child: PagedListView<int, Board>.separated(
+    //     pagingController: _pagingController,
+    //     builderDelegate: PagedChildBuilderDelegate<Board>(
+    //         itemBuilder: (context, item, index) {
+    //       return ListTile(
+    //         leading: CircleAvatar(
+    //           radius: 20,
+    //         ),
+    //         title: Text(item.title),
+    //       );
+    //     }),
+    //     separatorBuilder: (context, index) => const Divider(),
+    //   ),
       // child: WillPopScope(
       //   child: Scaffold(
       //     appBar: searchBar.build(context),
@@ -404,7 +438,7 @@ class _BoardListWidgetState extends State<BoardListWidget> {
       //     // )
       //   ),
       // ),
-    );
+    // );
 
     @override
     void dispose() {
