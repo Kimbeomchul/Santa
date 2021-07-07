@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
 import 'package:santa_front/model/board.dart';
 import 'package:santa_front/repository/board_repository.dart';
 

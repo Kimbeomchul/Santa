@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
   // 구글 로그인  -- Start
 
 
-   LoginWithGoogle() async {
+   loginWithGoogle() async {
     GoogleSignIn _googleSignIn = GoogleSignIn(
       scopes: [
         'email',
@@ -257,7 +257,7 @@ class _LoginPageState extends State<LoginPage> {
             GestureDetector(
               child:
               Image.asset('images/loginG.png' ,fit: BoxFit.cover,),
-              onTap: LoginWithGoogle,
+              onTap: loginWithGoogle,
             ),
             RaisedButton(
               child: Text("Logout"),

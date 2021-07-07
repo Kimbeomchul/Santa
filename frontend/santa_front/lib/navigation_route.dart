@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kakao_flutter_sdk/all.dart';
 import 'package:santa_front/navigation/chat.dart';
 import 'package:santa_front/ui/board_list_widget.dart';
 
-import 'navigation/board_list.dart';
 import 'list/HomePage.dart';
 import 'navigation/user_profile.dart';
-import 'navigation/board_list_test.dart';
 
 class NavigationRouter extends StatefulWidget {
   @override
@@ -22,7 +19,10 @@ class _NavigationRouterState extends State<NavigationRouter> {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return WillPopScope(
-       child: Scaffold(
+      onWillPop: () {
+        return;
+      },
+      child: Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,

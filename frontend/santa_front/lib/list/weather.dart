@@ -8,8 +8,8 @@ import 'package:santa_front/list/HomePage.dart';
 import '../FadeAnimation.dart';
 
 class WeatherPage extends StatefulWidget {
-  final Data; // 날씨데이터
-  WeatherPage({Key key, @required this.Data}) : super(key: key);
+  final data; // 날씨데이터
+  WeatherPage({Key key, @required this.data}) : super(key: key);
 
   @override
   _WeatherPageState createState() => _WeatherPageState();
@@ -51,13 +51,12 @@ class _WeatherPageState extends State<WeatherPage> {
                         Icons.arrow_back,
                         color: Colors.black54,
                       ),
-                      onPressed: (){
-                    (context);
-                  }),
+                      onPressed: null,
+                  ),
                 ),
               ],
             ),
-            Text('${widget.Data['weather'][0]['main']}',
+            Text('${widget.data['weather'][0]['main']}',
                 style: TextStyle(
                     fontSize: 24,
                     color: Colors.white,
@@ -70,7 +69,7 @@ class _WeatherPageState extends State<WeatherPage> {
                   color: Colors.white,
                   size: 16,
                 ),
-                Text(' ${widget.Data['name']}',
+                Text(' ${widget.data['name']}',
                     style: TextStyle(
                         fontSize: 16,
                         color: Colors.white,
@@ -84,7 +83,7 @@ class _WeatherPageState extends State<WeatherPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '${widget.Data['main']['temp'].toStringAsFixed(0)}',
+                  '${widget.data['main']['temp'].toStringAsFixed(0)}',
                   style: TextStyle(
                       fontSize: 65,
                       color: Colors.white,
@@ -168,6 +167,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                       IconButton(
                                         // Use the MdiIcons class for the IconData
                                         icon: new Icon( Icons.wb_sunny,color: Colors.white,),
+                                        onPressed: null,
                                       ),
                                     ),
                                     FadeAnimation(1.6,
@@ -175,7 +175,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                     ),
                                     FadeAnimation(1.6,
                                         Text(sun.format(DateTime.fromMillisecondsSinceEpoch(
-                                            widget.Data['sys']['sunrise'] * 1000)), style: TextStyle(color: Colors.white,fontSize: 14),)
+                                            widget.data['sys']['sunrise'] * 1000)), style: TextStyle(color: Colors.white,fontSize: 14),)
                                     ),
 
                                   ],
@@ -189,6 +189,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                       IconButton(
                                         // Use the MdiIcons class for the IconData
                                         icon: new Icon( Icons.nights_stay,color: Colors.white,),
+                                        onPressed: null,
                                       ),
                                     ),
                                     FadeAnimation(1.6,
@@ -196,7 +197,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                     ),
                                     FadeAnimation(1.6,
                                         Text(sun.format(DateTime.fromMillisecondsSinceEpoch(
-                                            widget.Data['sys']['sunset'] * 1000)), style: TextStyle(color: Colors.white,fontSize: 14),)
+                                            widget.data['sys']['sunset'] * 1000)), style: TextStyle(color: Colors.white,fontSize: 14),)
                                     ),
 
                                   ],
@@ -215,13 +216,14 @@ class _WeatherPageState extends State<WeatherPage> {
                                       IconButton(
                                         // Use the MdiIcons class for the IconData
                                         icon: new Icon( Icons.wb_sunny,color: Colors.white,),
+                                        onPressed: null,
                                       ),
                                     ),
                                     FadeAnimation(1.6,
                                         Text("습도 ", style: TextStyle(color: Colors.white,fontSize: 14),)
                                     ),
                                     FadeAnimation(1.6,
-                                        Text('${widget.Data['wind']['speed']} m/s', style: TextStyle(color: Colors.white,fontSize: 14),)
+                                        Text('${widget.data['wind']['speed']} m/s', style: TextStyle(color: Colors.white,fontSize: 14),)
                                     ),
 
                                   ],
@@ -235,6 +237,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                       IconButton(
                                         // Use the MdiIcons class for the IconData
                                         icon: new Icon( Icons.nights_stay,color: Colors.white,),
+                                        onPressed: null,
                                       ),
                                     ),
                                     FadeAnimation(1.6,
@@ -242,7 +245,7 @@ class _WeatherPageState extends State<WeatherPage> {
                                     ),
                                     FadeAnimation(1.6,
                                         Text(sun.format(DateTime.fromMillisecondsSinceEpoch(
-                                            widget.Data['sys']['sunset'] * 1000)), style: TextStyle(color: Colors.white,fontSize: 14),)
+                                            widget.data['sys']['sunset'] * 1000)), style: TextStyle(color: Colors.white,fontSize: 14),)
                                     ),
 
                                   ],

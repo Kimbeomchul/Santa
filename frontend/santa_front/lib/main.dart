@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:santa_front/users/login.dart';
 import 'package:provider/provider.dart';
-import 'provider/AjaxProvider.dart';
 import 'provider/board_provider.dart';
-import 'navigation_route.dart';
 
 
 void main() {
@@ -26,8 +24,6 @@ class MyApp extends StatelessWidget {
       ),
       home: MultiProvider(
         providers: [
-          ChangeNotifierProvider(
-            create: (BuildContext context) => AjaxProvider()),
           ChangeNotifierProvider(
               create: (BuildContext context) => BoardProvider()),
         ],

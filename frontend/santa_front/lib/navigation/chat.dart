@@ -41,14 +41,17 @@ class _UserChatState extends State<UserChat> {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return WillPopScope(
-        child:Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.cyan[600],
-            title: Text("CHATTIIINGGGG"),
-          ),
-         body:
-         profileList(),
+      onWillPop: () {
+        return;
+      },
+      child:Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.cyan[600],
+          title: Text("CHATTIIINGGGG"),
         ),
+        body:
+        profileList(),
+      ),
     );
   }
 }
