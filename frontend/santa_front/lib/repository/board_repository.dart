@@ -1,13 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:santa_front/model/board.dart';
 
 class BoardRepository {
   // 장고 API로 호출해서 값을 받아오는 부분
-
   Future<List<Board>> getBoardList(
     int offset,
     int limit, {
@@ -92,9 +89,10 @@ extension on Future<http.Response> {
       // List<dynamic> list = body['results'];
       //     print("예전거------");
       //     return list.map<Board>((item) => Board.fromJson(item)).toList();
-    
-
       return jsonParser(body['results']);
+    }
+    else {
+      // 에러처리
     }
   }
 }
