@@ -3,9 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:santa_front/list/HomePage.dart';
 import 'package:santa_front/mountain/mt_detail.dart';
-import 'package:santa_front/users/login.dart';
 import 'dart:async';
 import '../alert.dart';
 import 'mountain_model.dart';
@@ -20,8 +18,8 @@ import 'package:santa_front/pk_skeleton.dart';
 
 
 class MountainInfo extends StatefulWidget {
-  final String mt_word;
-  MountainInfo(this.mt_word);
+  final String mtWord;
+  MountainInfo(this.mtWord);
 
 
   @override
@@ -29,24 +27,24 @@ class MountainInfo extends StatefulWidget {
 }
 
 class _MountainInfoState extends State<MountainInfo> {
-  var mt_data;
-  var decode_data;
-  var deep_info;
+  var mtData;
+  var decodeData;
+  var deepInfo;
 
 
   //
   // var img_data;
   // var decode_img_data;
-  // var img_deep_info;
+  // var img_deepInfo;
 
   Mountain mt;
-  List<Mountain> search_mt = [];
+  List<Mountain> searchMt = [];
 
   //http://apis.data.go.kr/1400000/service/cultureInfoService/mntInfoImgOpenAPI?
   // mntiListNo=111100101&
   // ServiceKey=pnpnaretHrGHzfUsPt1RVDcThKijR7FalZPJqZUcdWH1hN3CX0W%2Fq%2F%2FknP%2FFY5b5PlrkxRqfsJjSjzlUdj%2Fj7g%3D%3D
 
-  final String mt_key = 'pnpnaretHrGHzfUsPt1RVDcThKijR7FalZPJqZUcdWH1hN3CX0W/q//knP/FY5b5PlrkxRqfsJjSjzlUdj/j7g==';
+  final String mtKey = 'pnpnaretHrGHzfUsPt1RVDcThKijR7FalZPJqZUcdWH1hN3CX0W/q//knP/FY5b5PlrkxRqfsJjSjzlUdj/j7g==';
   String url = 'http://apis.data.go.kr/1400000/service/cultureInfoService/';
   String serviceId = 'mntInfoOpenAPI?serviceKey=';
 
@@ -62,61 +60,61 @@ class _MountainInfoState extends State<MountainInfo> {
   Future getMData() async {
     //산정보
     http.Response response = await http.get(
-      Uri.encodeFull(url + serviceId + mt_key +'&searchWrd='+ widget.mt_word ),
+      Uri.encodeFull(url + serviceId + mtKey +'&searchWrd='+ widget.mtWord ),
       headers: {"Accept": "application/json"},
 
     );
-    mt_data = utf8.decode(response.bodyBytes);
-    decode_data = jsonDecode(mt_data);
+    mtData = utf8.decode(response.bodyBytes);
+    decodeData = jsonDecode(mtData);
 
     try {
-      deep_info = decode_data['response']['body']['items']['item'];
+      deepInfo = decodeData['response']['body']['items']['item'];
     } catch(e){
-      return _AlertError();
+      return _alertError();
     }
-    //print(deep_info);
+    //print(deepInfo);
 
-    if (!(deep_info is List)) {
+    if (!(deepInfo is List)) {
       Mountain mt1 = Mountain(
-          mntiname: deep_info['mntiname'],
-          mntilistno: deep_info['mntilistno'].toString(),
-          mntihigh: deep_info['mntihigh'].toString(),
-          mntidetails: deep_info['mntidetails'],
-          mntiadminnum: deep_info['mntiadminnum'],
-          mntiadmin: deep_info['mntiadmin'],
-          mntiadd: deep_info['mntiadd']
+          mntiname: deepInfo['mntiname'],
+          mntilistno: deepInfo['mntilistno'].toString(),
+          mntihigh: deepInfo['mntihigh'].toString(),
+          mntidetails: deepInfo['mntidetails'],
+          mntiadminnum: deepInfo['mntiadminnum'],
+          mntiadmin: deepInfo['mntiadmin'],
+          mntiadd: deepInfo['mntiadd']
       );
       print('검색 결과 : ${mt1.mntilistno}');
       setState(() {
-        search_mt.add(mt1);
+        searchMt.add(mt1);
       });
     }
     else {
-      for (int i = 0; i < deep_info.length; i++) {
+      for (int i = 0; i < deepInfo.length; i++) {
         Mountain mt1 = Mountain(
-            mntiname: deep_info[i]['mntiname'],
-            mntilistno: deep_info[i]['mntilistno'].toString(),
-            mntihigh: deep_info[i]['mntihigh'].toString(),
-            mntidetails: deep_info[i]['mntidetails'],
-            mntiadminnum: deep_info[i]['mntiadminnum'],
-            mntiadmin: deep_info[i]['mntiadmin'],
-            mntiadd: deep_info[i]['mntiadd']
+            mntiname: deepInfo[i]['mntiname'],
+            mntilistno: deepInfo[i]['mntilistno'].toString(),
+            mntihigh: deepInfo[i]['mntihigh'].toString(),
+            mntidetails: deepInfo[i]['mntidetails'],
+            mntiadminnum: deepInfo[i]['mntiadminnum'],
+            mntiadmin: deepInfo[i]['mntiadmin'],
+            mntiadd: deepInfo[i]['mntiadd']
         );
 //${widget.searchWrd}
-        print('${widget.mt_word} 검색 결과 : ${mt1.mntilistno}');
+        print('${widget.mtWord} 검색 결과 : ${mt1.mntilistno}');
         setState(() {
-          search_mt.add(mt1);
+          searchMt.add(mt1);
         });
       }
     }
 
 
 
-    return deep_info;
+    return deepInfo;
   }
 
 
- Widget _AlertError(){
+ void _alertError(){
     Navigator.push(context, MaterialPageRoute(builder: (context) => AlertPage()));
  }
   //
@@ -152,7 +150,7 @@ class _MountainInfoState extends State<MountainInfo> {
   // );
   //    //산 이미지정보
   //     http.Response responseImg = await http.get(
-  //       Uri.encodeFull(url + imgServiceId + mt_key +'&searchWrd='+ widget.mt_word ),
+  //       Uri.encodeFull(url + imgServiceId + mtKey +'&searchWrd='+ widget.mtWord ),
   //       headers: {"Accept": "application/json"},
   //
   //     );
@@ -164,7 +162,7 @@ class _MountainInfoState extends State<MountainInfo> {
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return Scaffold(
-      appBar: AppBar(title: Text('${widget.mt_word} 검색 결과'),),
+      appBar: AppBar(title: Text('${widget.mtWord} 검색 결과'),),
       body: _buildBody(),
 //      endDrawer: DrawerPage(),
       //resizeToAvoidBottomInset: false,
@@ -174,10 +172,10 @@ class _MountainInfoState extends State<MountainInfo> {
 
 
   Widget _buildBody() {
-    if (search_mt.length != 0) {
+    if (searchMt.length != 0) {
       return ListView.builder(
-        itemBuilder: searched_data,
-        itemCount: search_mt.length,
+        itemBuilder: searchedData,
+        itemCount: searchMt.length,
       );
     }
     else { // 검색결과 null
@@ -194,7 +192,7 @@ class _MountainInfoState extends State<MountainInfo> {
 
 
 
-  Widget searched_data(BuildContext context, int index) {
+  Widget searchedData(BuildContext context, int index) {
     return Container(
         margin: EdgeInsets.only(left: 18, right: 18, top: 18, bottom: 9),
         //height: MediaQuery.of(context).size.height / 3.5,
@@ -214,7 +212,7 @@ class _MountainInfoState extends State<MountainInfo> {
         ),
         child: GestureDetector(
           onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => MtDetailPage(search_mt[index])));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MtDetailPage(searchMt[index])));
           },
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -247,7 +245,7 @@ class _MountainInfoState extends State<MountainInfo> {
                                     Padding(
                                       padding: const EdgeInsets.all(8),
                                       child: Text(
-                                        search_mt[index].mntiname,
+                                        searchMt[index].mntiname,
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -273,7 +271,7 @@ class _MountainInfoState extends State<MountainInfo> {
                                             padding: EdgeInsets.all(2),),
                                           Expanded(
                                             child: Text(
-                                              search_mt[index].mntiadd,
+                                              searchMt[index].mntiadd,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(fontSize: 14,
                                                   color: Colors.black54),

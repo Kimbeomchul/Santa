@@ -7,7 +7,6 @@ import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:santa_front/navigation/setting_menu.dart';
 import 'package:santa_front/navigation/board_detail.dart';
 import 'package:santa_front/navigation/board_write.dart';
-import 'package:santa_front/repository/board_repository.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class BoardListWidget extends StatefulWidget {
@@ -36,6 +35,21 @@ class _BoardListWidgetState extends State<BoardListWidget> {
     super.initState();
   }
 
+  Widget _buildBody() {
+    return RefreshIndicator(
+      onRefresh: () => Future.sync(
+        () => _pagingController.refresh(),
+      ),
+      child: PagedListView<int, Board>.separated(
+        pagingController: _pagingController,
+        builderDelegate: PagedChildBuilderDelegate<Board>(
+          itemBuilder: (context, item, index) => boardCard(context, item)
+          ),
+          separatorBuilder: (context, index) => const Divider(),
+      ),
+    );
+  }
+
   Future<void> _fetchPage(int pageKey) async {
     try {
       _boardProvider = Provider.of<BoardProvider>(context, listen: false);
@@ -55,251 +69,113 @@ class _BoardListWidgetState extends State<BoardListWidget> {
     }
   }
 
-  // Widget _makeListView(List<Board> boardList) {
-  //   // LsitView -> PagedListView
-  //   return PagedListView<int, Board>(
-  //     pagingController: _pagingController,
-  //     builderDelegate: PagedChildBuilderDelegate<Board>(
-  //       itemBuilder: (context, item, index) => BoardListItem(
-  //         boardList: item,
-  //       ),
-  //     ),
-  //   );
-  //   return ListView.separated(
-  //     itemCount: boardList.length,
-  //     itemBuilder: (BuildContext context, int index) {
-  //       return Center(
-  //         child: Text(boardList[index].title),
-  //       );
-  //     },
-  //     separatorBuilder: (BuildContext context, int index) {
-  //       return Divider();
-  //     },
-  //   );
-  // }
-  // }
-
-  Widget boardCard(BuildContext context, int index) {
-    if (index < 10) {
-      return Container(
-        child: Card(
-          elevation: 10,
-          child: Consumer<BoardProvider>(
-            builder: (context, provider, widget) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => BoardDetail())); // 게시판 상세페이지
-                },
-                child: imageRoute(index, provider.boardList),
-              );
-            },
-          ),
+  Widget boardCard(BuildContext context, item) {
+    return Container(
+      child: Card(
+        elevation: 10,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BoardDetail())); // 게시판 상세페이지
+          },
+          child: imageRoute(item),
         ),
-      );
-    }
-  }
-
-  Widget _buildBody(List<Board> boardList) {
-    return PagedListView<int, Board>.separated(
-      pagingController: _pagingController,
-      builderDelegate:
-          PagedChildBuilderDelegate<Board>(itemBuilder: (context, item, index) {
-        return ListTile(
-          leading: CircleAvatar(
-            radius: 20,
-          ),
-          title: Text(item.title),
-        );
-      }),
-      separatorBuilder: (context, index) => const Divider(),
+      ),
     );
   }
 
-  Widget imageRoute(int index, List<Board> boardList) {
-    var imgUrl = "0";
-
-    if (imgUrl != "1") {
-      return Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 14, left: 10),
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    width: 40.0,
-                    height: 40.0,
-                    decoration: BoxDecoration(
-                        color: Colors.red,
-                        image: DecorationImage(
-                            image: AssetImage('images/santalogo.png'),
-                            fit: BoxFit.cover),
-                        borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                        boxShadow: [
-                          BoxShadow(blurRadius: 3.0, color: Colors.black)
-                        ]),
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  //눌렀을시 뜰 프로필 팝업
-                },
+  Widget imageRoute(item) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 14, left: 10),
+              child: GestureDetector(
+                onTap: () {},
                 child: Container(
-                  padding: EdgeInsets.only(top: 15, left: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(boardList[index].user),
-                      Text(
-                        boardList[index].created,
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  ),
+                  width: 40.0,
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                      color: Colors.red,
+                      image: DecorationImage(
+                          image: AssetImage('images/santalogo.png'),
+                          fit: BoxFit.cover),
+                      borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                      boxShadow: [
+                        BoxShadow(blurRadius: 3.0, color: Colors.black)
+                      ]),
                 ),
               ),
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 20, bottom: 10),
-            width: 420,
-            height: 300,
-            child: Image.asset(
-              'images/1.jpeg',
-              fit: BoxFit.cover,
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(" "),
-              Text(
-                boardList[index].user,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-              ),
-              Text("   "),
-              Text(
-                boardList[index].content,
-                style: TextStyle(fontSize: 15),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(
-                Icons.favorite_border,
-                color: Colors.black,
-                size: 20,
-              ),
-              Text(
-                "  ",
-                style: TextStyle(fontSize: 15),
-              ),
-            ],
-          ),
-          Padding(padding: EdgeInsets.only(bottom: 10))
-        ],
-      );
-    } else {
-      return Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: 14, left: 10),
-                child: GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    width: 40.0,
-                    height: 40.0,
-                    decoration: BoxDecoration(
-                        color: Colors.red,
-                        image: DecorationImage(
-                            image: AssetImage('images/santalogo.png'),
-                            fit: BoxFit.cover),
-                        borderRadius: BorderRadius.all(Radius.circular(75.0)),
-                        boxShadow: [
-                          BoxShadow(blurRadius: 3.0, color: Colors.black)
-                        ]),
-                  ),
+            GestureDetector(
+              onTap: () {
+                //눌렀을시 뜰 프로필 팝업
+              },
+              child: Container(
+                padding: EdgeInsets.only(top: 15, left: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(item.user),
+                    Text(
+                      item.created,
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  //눌렀을시 뜰 프로필 팝업
-                },
-                child: Container(
-                  padding: EdgeInsets.only(top: 15, left: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(boardList[index].user),
-                      Text(
-                        boardList[index].created,
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+            ),
+          ],
+        ),
+        Container(
+          padding: EdgeInsets.only(top: 20, bottom: 10),
+          width: 420,
+          height: 300,
+          child: Image.asset(
+            'images/1.jpeg',
+            fit: BoxFit.cover,
           ),
-
-          Container(
-            padding: EdgeInsets.only(top: 10, bottom: 5),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "   ",
-                style: TextStyle(fontSize: 15),
-              ),
-              Text(
-                boardList[index].content,
-                style: TextStyle(fontSize: 15),
-              ),
-            ],
-          ),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(
-                Icons.favorite_border,
-                color: Colors.black,
-                size: 20,
-              ),
-              Text(
-                "  ",
-                style: TextStyle(fontSize: 15),
-              ),
-            ],
-          ),
-          Padding(padding: EdgeInsets.only(bottom: 10)),
-          // Text(indexOf as String),
-          // IconButton(icon: Icon(Icons.email), onPressed: (){
-          //   more(index);
-          // }),
-        ],
-      );
-    }
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(" "),
+            Text(
+              item.user,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
+            Text("   "),
+            Text(
+              item.content,
+              style: TextStyle(fontSize: 15),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.favorite_border,
+              color: Colors.black,
+              size: 20,
+            ),
+            Text(
+              "  ",
+              style: TextStyle(fontSize: 15),
+            ),
+          ],
+        ),
+        Padding(padding: EdgeInsets.only(bottom: 10))
+      ],
+    );
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -360,18 +236,19 @@ class _BoardListWidgetState extends State<BoardListWidget> {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp]); // 방향전환 세로고정
     return WillPopScope(
+      onWillPop: () {
+        return;
+      },
       child: Scaffold(
           appBar: searchBar.build(context),
           key: _scaffoldKey,
-          body: Consumer<BoardProvider>(builder: (context, provider, widget) {
-            return _buildBody(provider.boardList);
-          }),
+          body: _buildBody(),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => BoardWrite())); // 글쓰기페이지로 이동
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BoardWrite())); // 글쓰기페이지로 이동
             },
             child: Icon(
               Icons.add,
@@ -379,71 +256,12 @@ class _BoardListWidgetState extends State<BoardListWidget> {
             ),
             backgroundColor: Colors.black,
           )),
-      onWillPop: () {
-        return;
-       },
     );
-    // _boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    // _boardProvider.loadBoardList();
 
-    // return RefreshIndicator(
-    //   onRefresh: () => Future.sync(
-    //     () => _pagingController.refresh(),
-    //   ),
-    //   child: PagedListView<int, Board>.separated(
-    //     pagingController: _pagingController,
-    //     builderDelegate: PagedChildBuilderDelegate<Board>(
-    //         itemBuilder: (context, item, index) {
-    //       return ListTile(
-    //         leading: CircleAvatar(
-    //           radius: 20,
-    //         ),
-    //         title: Text(item.title),
-    //       );
-    //     }),
-    //     separatorBuilder: (context, index) => const Divider(),
-    //   ),
-      // child: WillPopScope(
-      //   child: Scaffold(
-      //     appBar: searchBar.build(context),
-      //     key: _scaffoldKey,
-      //     body: Consumer<BoardProvider>(
-      //       builder: (context, provider, widget) {
-      //         return _buildBody(provider.boardList);
-      //       },
-      //     ),
-      //     floatingActionButton: FloatingActionButton(
-      //       onPressed: () {
-      //         Navigator.push(
-      //             context,
-      //             MaterialPageRoute(
-      //                 builder: (context) => BoardWrite())); // 글쓰기페이지로 이동
-      //       },
-      //       child: Icon(
-      //         Icons.add,
-      //         color: Colors.white,
-      //       ),
-      //       backgroundColor: Colors.black,
-      //     ),
-      //     // body: Consumer<BoardProvider>(
-      //     //   builder: (context, provider, widget) {
-      //     //     print(provider.boardList);
-      //     //     if (provider.boardList != null && provider.boardList.length > 0) {
-      //     //       return _makeListView(provider.boardList);
-      //     //     }
-      //     //     return Center(
-      //     //       child: CircularProgressIndicator(),
-      //     //     );
-      //     //   },
-      //     // )
-      //   ),
-      // ),
-    // );
-
-    @override
-    void dispose() {
-      _pagingController.dispose();
-      super.dispose();
-    }
+    // @override
+    // void dispose() {
+    //   _pagingController.dispose();
+    //   super.dispose();
+    // }
   }
 }

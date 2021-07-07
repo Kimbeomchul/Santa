@@ -10,8 +10,8 @@ class BoardWrite extends StatefulWidget {
 }
 
 class _BoardWriteState extends State<BoardWrite> {
-  final TitleController = TextEditingController();
-  final ContentController = TextEditingController();
+  final titleController = TextEditingController();
+  final contentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class _BoardWriteState extends State<BoardWrite> {
         child: Column(
           children: [
             TextField(
-                controller: TitleController,
+                controller: titleController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: '제목',
@@ -41,12 +41,11 @@ class _BoardWriteState extends State<BoardWrite> {
                 keyboardType: TextInputType.multiline,
                 minLines: 1,//Normal textInputField will be displayed
                 maxLines: 25,// when user presses enter it will adapt to it
-                controller: ContentController,
+                controller: contentController,
                 decoration: InputDecoration(
                   labelText: '글내용',
                 ),
             ),
-
           ],
         ),
       ),
@@ -65,8 +64,8 @@ class _BoardWriteState extends State<BoardWrite> {
       },
       body: jsonEncode(
         {
-          "title": TitleController.text,
-          "content": ContentController.text,
+          "title": titleController.text,
+          "content": contentController.text,
         }
       ),
     );

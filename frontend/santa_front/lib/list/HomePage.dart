@@ -8,9 +8,6 @@ import 'package:santa_front/list/maps.dart';
 import 'package:santa_front/list/weather.dart';
 import 'package:santa_front/mountain/mt_info.dart';
 import 'package:santa_front/navigation/aboutus.dart';
-import 'package:santa_front/navigation/board_list.dart';
-import 'package:santa_front/main.dart';
-import 'package:santa_front/list/santa_recommand.dart';
 import 'package:santa_front/list/santa_smalltalk.dart';
 import 'package:http/http.dart' as http;
 import 'package:santa_front/users/login.dart';
@@ -209,6 +206,9 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
+      onWillPop: () {
+        return;
+      },
       child: Scaffold(
         key: scaffoldKey,
         drawer : _drawer(),
@@ -338,7 +338,7 @@ class HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     IconButton(icon: Icon(Icons.cloud), onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => WeatherPage(Data: weatherData)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => WeatherPage(data: weatherData)));
                     }),
                     FutureBuilder(
                       future: getData(),

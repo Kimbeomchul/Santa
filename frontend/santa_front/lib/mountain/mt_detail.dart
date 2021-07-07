@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 
 import 'mountain_model.dart';
 import 'package:expandable/expandable.dart';
@@ -20,12 +17,12 @@ class MtDetailPage extends StatefulWidget {
 class _MtDetailPageState extends State<MtDetailPage>
     with TickerProviderStateMixin {
   //이제 여기에 그.. 정보들을 띄워주면 된다능. 어렵지 않다능~~~!!~!~!~!
-  final String client_key = 'ntqx0%2BT6eKi2wLBQvSktuws5aGsQIdWFnih93w9ksArXbyHrzGWtBvuxw58F4FHTywBjVl4e5H7zj1dfHeVQJA%3D%3D';
-  final String search_url1= 'http://apis.data.go.kr/1400000/service/cultureInfoService/mntInfoImgOpenAPI?mntiListNo=';
-  final String search_url2 = '&ServiceKey=';
-  final String search_url3 = '&_type=json';
+  final String clientKey = 'ntqx0%2BT6eKi2wLBQvSktuws5aGsQIdWFnih93w9ksArXbyHrzGWtBvuxw58F4FHTywBjVl4e5H7zj1dfHeVQJA%3D%3D';
+  final String searchUrl1= 'http://apis.data.go.kr/1400000/service/cultureInfoService/mntInfoImgOpenAPI?mntiListNo=';
+  final String searchUrl2 = '&ServiceKey=';
+  final String searchUrl3 = '&_type=json';
 
-  List<String> search_imagelist = [];
+  List<String> searchImagelist = [];
 
   AnimationController animationController;
   Animation<double> animation;
@@ -46,21 +43,21 @@ class _MtDetailPageState extends State<MtDetailPage>
     animationController.forward();
   }
 
-Widget detail_if(){
-    var detail_info = widget.mountain.mntidetails.toString();
+Widget detailIf(){
+    var detailInfo = widget.mountain.mntidetails.toString();
 
-    if(detail_info == "( - )"){
-      detail_info ='산 정보기 존재하지 않습니다. 빠르게 추가하도록 하겠습니다!';
+    if(detailInfo == "( - )"){
+      detailInfo ='산 정보기 존재하지 않습니다. 빠르게 추가하도록 하겠습니다!';
     }else{
-      detail_info = widget.mountain.mntidetails;
+      detailInfo = widget.mountain.mntidetails;
     }
     return ExpandablePanel(
 
       header: Text('상세 설명', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, letterSpacing: 0.27, color: Colors.cyan), ),
-      expanded: Text(detail_info, softWrap: true, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300, color: Colors.black54),),
+      expanded: Text(detailInfo, softWrap: true, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300, color: Colors.black54),),
       tapHeaderToExpand: true,
       hasIcon: true,
-      collapsed: Text(detail_info, softWrap: true, maxLines: 4, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300, letterSpacing: 0.27, color: Colors.black54),),
+      collapsed: Text(detailInfo, softWrap: true, maxLines: 4, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300, letterSpacing: 0.27, color: Colors.black54),),
     );
 }
   @override
@@ -152,7 +149,7 @@ Widget detail_if(){
                   padding: EdgeInsets.only(left: 30, right: 30, top: 15, bottom: 15),
                   child: Column(
                     children: <Widget>[
-                      detail_if(), // 산 디테일정보 분기
+                      detailIf(), // 산 디테일정보 분기
                     ],
                   ),
                 ),
