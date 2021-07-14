@@ -3,19 +3,19 @@ import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:santa_front/list/HomePage.dart';
+import 'package:santa_front/ui/home_widget.dart';
 
 import '../FadeAnimation.dart';
 
-class WeatherPage extends StatefulWidget {
+class WeatherWidget extends StatefulWidget {
   final data; // 날씨데이터
-  WeatherPage({Key key, @required this.data}) : super(key: key);
+  WeatherWidget({Key key, @required this.data}) : super(key: key);
 
   @override
-  _WeatherPageState createState() => _WeatherPageState();
+  _WeatherWidgetState createState() => _WeatherWidgetState();
 }
 
-class _WeatherPageState extends State<WeatherPage> {
+class _WeatherWidgetState extends State<WeatherWidget> {
   DateFormat formatter = DateFormat('H시 m분 s초');
   DateFormat sun = DateFormat('H시 m분');
   var textground = Color(0xFFB1D1CF);

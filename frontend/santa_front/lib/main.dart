@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:santa_front/users/login.dart';
+import 'package:santa_front/ui/login_widget.dart';
 import 'package:provider/provider.dart';
 import 'provider/board_provider.dart';
 
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(
               create: (BuildContext context) => BoardProvider()),
         ],
-        child: KakaoLogin(),
+        child: LoginWidget(),
       ),
     );
   }

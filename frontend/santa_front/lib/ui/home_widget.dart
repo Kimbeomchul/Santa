@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/all.dart';
-import 'package:santa_front/list/maps.dart';
-import 'package:santa_front/list/weather.dart';
-import 'package:santa_front/mountain/mt_info.dart';
+import 'package:santa_front/ui/maps_widget.dart';
+import 'package:santa_front/ui/weather_widget.dart';
+import 'mountain_info.dart';
 import 'package:santa_front/navigation/aboutus.dart';
-import 'package:santa_front/list/santa_smalltalk.dart';
+import 'package:santa_front/ui/smalltalk_widget.dart';
 import 'package:http/http.dart' as http;
-import 'package:santa_front/users/login.dart';
+import 'package:santa_front/ui/login_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-class HomePage extends StatefulWidget {
+class HomeWidget extends StatefulWidget {
   @override
-  HomePageState createState() => HomePageState();
+  HomeWidgetState createState() => HomeWidgetState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomeWidgetState extends State<HomeWidget> {
   var scaffoldKey = GlobalKey<ScaffoldState>();
   final mycontroller = TextEditingController();
   FocusNode myFocusNode;
@@ -103,7 +103,7 @@ class HomePageState extends State<HomePage> {
       final GoogleSignIn _googleSignIn = new GoogleSignIn();
       _googleSignIn.signOut();
       _prefs.clear(); // SharedPrefer 키값 전부 삭 제 !
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => KakaoLogin(),), (route) => false, ); //스택초기화 라우터
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => LoginWidget(),), (route) => false, ); //스택초기화 라우터
     }else{
       print("세션에러");
     }
@@ -149,7 +149,7 @@ class HomePageState extends State<HomePage> {
       try {
         var code = await UserApi.instance.logout();
         print(code.toString());
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => KakaoLogin(),), (route) => false, ); //스택초기화 라우터
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => LoginWidget(),), (route) => false, ); //스택초기화 라우터
       } catch (e) {
         print("로그아웃 실패 : $e");
       }
@@ -229,7 +229,7 @@ class HomePageState extends State<HomePage> {
   /*
   buildAppBar() {
     return AppBar(
-      title: Text('HomePage'),
+      title: Text('HomeWidget'),
     );
   }
 */
@@ -338,7 +338,7 @@ class HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     IconButton(icon: Icon(Icons.cloud), onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => WeatherPage(data: weatherData)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => WeatherWidget(data: weatherData)));
                     }),
                     FutureBuilder(
                       future: getData(),
@@ -391,7 +391,7 @@ class HomePageState extends State<HomePage> {
 
                     GestureDetector(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Maps()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => MapsWidget()));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -406,7 +406,7 @@ class HomePageState extends State<HomePage> {
                     ),
                     GestureDetector(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalkWidget()));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -420,7 +420,7 @@ class HomePageState extends State<HomePage> {
                       ),
                     ),                  GestureDetector(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalkWidget()));
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -459,7 +459,7 @@ class HomePageState extends State<HomePage> {
                     Text('산타의 한마디', style: TextStyle(fontSize:15, fontWeight:FontWeight.w700,letterSpacing:0.22,color: Colors.cyan)),
                     IconButton(icon: Icon(Icons.arrow_forward_ios, color: Colors.cyan, size: 18,),
                       onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalkWidget()));
                       },
                     ),
 
@@ -484,7 +484,7 @@ class HomePageState extends State<HomePage> {
                     Text('HOT 게시글', style: TextStyle(fontSize:15, fontWeight:FontWeight.w700,letterSpacing:0.22,color: Colors.cyan)),
                     IconButton(icon: Icon(Icons.arrow_forward_ios, color: Colors.cyan, size: 18,),
                       onPressed: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalk()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => SmallTalkWidget()));
                       },
                     ),
 
@@ -540,7 +540,7 @@ class HomePageState extends State<HomePage> {
                 keyboardType: TextInputType.text,
                 controller: mycontroller,
                 onEditingComplete: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfo(mycontroller.text)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfoWidget(mycontroller.text)));
                 },
 
                 decoration: InputDecoration(
@@ -549,7 +549,7 @@ class HomePageState extends State<HomePage> {
                   prefixIcon: GestureDetector(
                     child: Icon(Icons.search, color: Colors.cyan, size: 30,),
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfo(mycontroller.text)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MountainInfoWidget(mycontroller.text)));
                     },
                   ),
                   hintText: "가고싶은 산을 검색하세요",

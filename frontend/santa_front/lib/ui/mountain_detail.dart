@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'mountain_model.dart';
+import 'package:santa_front/model/mountain.dart';
 import 'package:expandable/expandable.dart';
 
 
-class MtDetailPage extends StatefulWidget {
+class MountainDetailWidget extends StatefulWidget {
   final Mountain mountain;
  // final String imglink;
-  MtDetailPage(this.mountain);
+  MountainDetailWidget(this.mountain);
 
   @override
-  _MtDetailPageState createState() => _MtDetailPageState();
+  _MountainDetailWidgetState createState() => _MountainDetailWidgetState();
 }
 
-class _MtDetailPageState extends State<MtDetailPage>
+class _MountainDetailWidgetState extends State<MountainDetailWidget>
     with TickerProviderStateMixin {
   //이제 여기에 그.. 정보들을 띄워주면 된다능. 어렵지 않다능~~~!!~!~!~!
   final String clientKey = 'ntqx0%2BT6eKi2wLBQvSktuws5aGsQIdWFnih93w9ksArXbyHrzGWtBvuxw58F4FHTywBjVl4e5H7zj1dfHeVQJA%3D%3D';
