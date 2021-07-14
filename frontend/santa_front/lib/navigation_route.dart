@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:santa_front/navigation/chat.dart';
 import 'package:santa_front/ui/board_list_widget.dart';
 
-import 'list/HomePage.dart';
+import 'ui/home_widget.dart';
 import 'navigation/user_profile.dart';
 
 class NavigationRouter extends StatefulWidget {
@@ -63,7 +63,7 @@ class _NavigationRouterState extends State<NavigationRouter> {
   }
 
   List _widgetOptions = [
-    HomePage(), // 인덱스 0
+    HomeWidget(), // 인덱스 0
     BoardListWidget(), // 인덱스 1
     UserChat(), // 인덱스 2
     UserProfile(), // 인덱스 3

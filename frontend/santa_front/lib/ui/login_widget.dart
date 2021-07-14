@@ -8,7 +8,7 @@ import 'dart:convert';
 
 import '../navigation_route.dart';
 
-class KakaoLogin extends StatelessWidget {
+class LoginWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 

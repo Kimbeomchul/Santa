@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class SmallTalk extends StatefulWidget {
+class SmallTalkWidget extends StatefulWidget {
   @override
-  _SmallTalkState createState() => _SmallTalkState();
+  _SmallTalkWidgetState createState() => _SmallTalkWidgetState();
 }
 
-class _SmallTalkState extends State<SmallTalk> {
+class _SmallTalkWidgetState extends State<SmallTalkWidget> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]); // 방향전환 세로고정

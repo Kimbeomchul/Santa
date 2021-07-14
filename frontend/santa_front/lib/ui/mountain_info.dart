@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:santa_front/mountain/mt_detail.dart';
+import 'mountain_detail.dart';
 import 'dart:async';
 import '../alert.dart';
-import 'mountain_model.dart';
+import 'package:santa_front/model/mountain.dart';
 import 'package:santa_front/pk_skeleton.dart';
 
 
@@ -17,16 +17,16 @@ import 'package:santa_front/pk_skeleton.dart';
 //
 
 
-class MountainInfo extends StatefulWidget {
+class MountainInfoWidget extends StatefulWidget {
   final String mtWord;
-  MountainInfo(this.mtWord);
+  MountainInfoWidget(this.mtWord);
 
 
   @override
-  _MountainInfoState createState() => _MountainInfoState();
+  _MountainInfoWidgetState createState() => _MountainInfoWidgetState();
 }
 
-class _MountainInfoState extends State<MountainInfo> {
+class _MountainInfoWidgetState extends State<MountainInfoWidget> {
   var mtData;
   var decodeData;
   var deepInfo;
@@ -212,7 +212,7 @@ class _MountainInfoState extends State<MountainInfo> {
         ),
         child: GestureDetector(
           onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => MtDetailPage(searchMt[index])));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => MountainDetailWidget(searchMt[index])));
           },
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(15)),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kakao_flutter_sdk/all.dart';
-import 'package:santa_front/users/login.dart';
+import 'package:santa_front/ui/login_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfile extends StatefulWidget {
@@ -71,7 +71,7 @@ class _UserProfileState extends State<UserProfile> {
      final GoogleSignIn _googleSignIn = new GoogleSignIn();
      _googleSignIn.signOut();
      _prefs.clear(); // SharedPrefer 키값 전부 삭 제 !
-     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => KakaoLogin(),), (route) => false, ); //스택초기화 라우터
+     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => LoginWidget(),), (route) => false, ); //스택초기화 라우터
    }else{
      print("세션에러");
    }
@@ -81,7 +81,7 @@ class _UserProfileState extends State<UserProfile> {
       try {
         var code = await UserApi.instance.logout();
         print(code.toString());
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => KakaoLogin(),), (route) => false, ); //스택초기화 라우터
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (BuildContext context) => LoginWidget(),), (route) => false, ); //스택초기화 라우터
       } catch (e) {
         print("로그아웃 실패 : $e");
       }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class SantaRec extends StatefulWidget {
+class RecommendWidget extends StatefulWidget {
   @override
-  _SantaRecState createState() => _SantaRecState();
+  _RecommendWidgetState createState() => _RecommendWidgetState();
 }
 
-class _SantaRecState extends State<SantaRec> {
+class _RecommendWidgetState extends State<RecommendWidget> {
 
   @override
   Widget build(BuildContext context) {
