@@ -6,9 +6,8 @@
 
 
 ## What We Used
-- 등산로 정보 : 공공 데이터 포털 산정보 RESTful API
-- 이미지 정보 : BING 이미지 검색
-- 지도 : Google Map Platform
+- Stack: Django, PostgreSQL, Flutter
+- Map & Weather : 공공 산 정보 API, GoogleMap API
 
 
 ## Sample Screens
