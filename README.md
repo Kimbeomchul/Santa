@@ -7,7 +7,7 @@
 
 ## What We Used
 - Stack: Django, PostgreSQL, Flutter
-- Map & Weather : 공공 산 정보 API, GoogleMap API
+- Map & Weather : 공공 산 정보 API, GoogleMap API , 실시간 날씨 정보 API
 
 
 ## Sample Screens
